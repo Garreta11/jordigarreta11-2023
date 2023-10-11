@@ -20,9 +20,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Navigation />
-        <PageWrapper>
+        {/* <PageWrapper> */}
           {children}
-        </PageWrapper>
+        {/* </PageWrapper> */}
         <Footer />
       </body>
     </html>
