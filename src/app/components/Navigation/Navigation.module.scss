@@ -1,0 +1,112 @@
+@use '../../_styles/breakpoints.scss' as *;
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-radius: 4px;
+    height: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-two);
+    z-index: 10;
+
+    border-bottom: 1px solid var(--color-one);
+
+    transition: background-color ease 1s, color ease 1s;
+
+    &_logo {
+        &:hover {
+            .titleWhite {
+                transform: scale(1.05);
+            }
+            .header_logo_job {
+                left: 100%;
+            }
+        }
+
+        &_job {
+            transition: all ease 0.5s;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    
+
+        @include sm {
+            width: 50%;
+        }
+    }
+
+    &_right {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+
+        @include sm {
+            gap: 20px;
+        }
+    }
+    
+    &_navigation {
+        display: flex;
+        list-style: none;
+        gap: 32px;
+        font-size: 1em;
+    
+        li {
+            display: flex;
+            a {
+                -webkit-text-stroke: 1px var(--color-one);
+                color: var(--color-two);
+                transition: all ease 0.3s;
+            }
+
+            p {
+                cursor: pointer;
+                color: var(--color-one);
+            }
+        }
+    }
+    
+    &_title {
+        text-transform: uppercase;
+        cursor: pointer;
+        font-size: 2em;
+        font-weight: normal;
+        line-height: 30px;
+    
+        @include sm {
+            font-size: 1.4em;
+        }
+    }
+
+    &_btn {
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+
+        padding: 0;
+
+        &_img {
+            width: 30px;
+            transition: all ease 0.5s;
+            
+            &_dark {
+                transform: rotate(180deg);
+            }
+
+            path {
+                fill: var(--color-one);
+            }
+        }
+
+        &:hover {
+            transform: scale(1.5);
+            background-color: transparent;
+        }
+    }
+}

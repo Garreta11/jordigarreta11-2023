@@ -1,0 +1,63 @@
+@use './_styles/breakpoints.scss' as *;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7rem;
+  min-height: 100vh;
+}
+
+.home {
+  width: 100%;
+  &--container {
+      overflow-y: scroll;
+      height: 200vh;
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 200px;
+      text-align: center;
+  }
+
+  &--wrapper {
+      padding: 0px 20px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100vw;
+      height: 95vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      @include sm {
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+      }
+
+      &--item {
+        a {
+          -webkit-text-stroke: 1px var(--color-one);
+          color: transparent;
+          font-size: 12em;
+          transition: color ease 0.3s;
+          font-weight: 500;
+
+          &:hover {
+            color: var(--color-one);
+            font-weight: 500;
+          }
+
+          @include sm {
+              font-size: 5em;
+          }
+
+        }
+
+      }
+  }
+
+
+}

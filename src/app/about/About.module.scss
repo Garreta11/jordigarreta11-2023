@@ -1,0 +1,113 @@
+@use '../_styles/breakpoints.scss' as *;
+
+.about {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 20px;
+    min-height: 100vh;
+    height: calc(100vh - 100px);
+    position: relative;
+    top: 100px;
+
+    @include sm {
+      padding: 30px 20px;
+    }
+
+    &_about {
+      width: 100%;
+
+      &_description {
+        font-size: 2em;
+        margin-bottom: 50px;
+        width: 70%;
+        font-weight: 300;
+        @include sm {
+          width: 100%;
+        }
+      }
+
+      &_info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @include sm {
+          flex-direction: column;
+          align-items: normal;
+        }
+      }
+
+      &_make {
+        font-size: 10em;
+        width: 50%;
+        @include sm {
+          font-size: 3em;
+          margin-bottom: 20px;
+        }
+      }
+
+      &_friends {
+        text-align: right;
+
+        @include sm {
+          margin-bottom: 30px;
+        }
+
+        &_title {
+          font-size: 3em;
+          @include sm {
+            font-size: 2em;
+          }
+        }
+        strong {
+          font-size: 2em;
+          font-weight: 100;
+
+          @include sm {
+            font-size: 1em;
+          }
+        }
+      }
+      
+    }
+
+    &_cv {
+
+      width: 100%;
+      padding-bottom: 100px;
+
+      &_title {
+        font-size: 3em;
+        margin-bottom: 30px;
+      }
+
+      &_top {
+        columns: 2;
+        @include sm {
+          columns: 1;
+        }
+      }
+
+      div {
+        margin-bottom: 20px;
+        @include sm {
+          margin-bottom: 30px;
+        }
+      }
+
+      p {
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        font-weight: 100;
+        font-size: 2em;
+        text-transform: uppercase;
+      }
+
+    }
+
+  }

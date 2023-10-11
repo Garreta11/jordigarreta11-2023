@@ -1,0 +1,44 @@
+// @font-face {
+//     font-family: HelveticaNeue;
+//     src: url("./fonts/HelveticaNeueBlackExt.ttf") format("truetype");
+// }
+
+// @font-face {
+//     font-family: FA_FWASYDSOAO;
+//     src: url("./fonts/FA_FWASYDSOAO.ttf") format("truetype");
+// }
+
+// @font-face {
+//     font-family: KidsHand;
+//     src: url("./fonts/KidsHand.ttf") format("truetype");
+// }
+
+// @font-face {
+//     font-family: Manrope-Regular;
+//     src: url("./fonts/Manrope-Regular.ttf") format("truetype");
+// }
+
+// @font-face {
+//     font-family: FugueMono;
+//     src: url("./fonts/FugueMono.ttf") format("truetype");
+// }
+
+@font-face {
+    font-family: NeueMontreal;
+    src: url("/fonts/NeueMontreal-Light.otf") format("opentype");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: NeueMontreal;
+    src: url("/fonts/NeueMontreal-Regular.otf") format("opentype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: NeueMontreal;
+    src: url("/fonts/NeueMontreal-Medium.otf") format("opentype");
+    font-weight: 800;
+}
+
+$fontwebsite: NeueMontreal;

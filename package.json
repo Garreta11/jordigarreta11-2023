@@ -1,0 +1,28 @@
+{
+  "name": "jordigarretaduarte",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.87.1",
+    "@react-three/fiber": "^8.14.5",
+    "@studio-freight/lenis": "^1.0.26",
+    "eslint": "8.46.0",
+    "eslint-config-next": "13.4.12",
+    "framer-motion": "^10.16.4",
+    "framer-motion-3d": "^10.16.4",
+    "gsap": "^3.12.2",
+    "next": "^13.5.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-webcam": "^7.1.1",
+    "sass": "^1.64.2",
+    "swiper": "^10.3.1",
+    "three": "^0.157.0"
+  }
+}

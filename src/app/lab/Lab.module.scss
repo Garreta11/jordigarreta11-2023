@@ -1,0 +1,79 @@
+.labpage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;   
+}
+
+.swiperslide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.experiment {
+
+  &:hover {
+
+    
+    video {
+      opacity: 1;
+      filter: grayscale(0);
+      width: 150%;
+      z-index: 10;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    .experiment_infoElement {
+      width: 150%;
+    }
+  }
+
+  &_videoElement {
+    position: relative;
+    opacity: 0.5;
+    filter: grayscale(1);
+    transform: scale(1);
+    transition: all ease 0.5s;
+    z-index: 0;
+    box-shadow: 0px;
+    margin-bottom: 20px;
+    max-height: 70%;
+
+    width: 100%;
+    height: auto;
+
+    max-height: calc(100vh - 200px);
+    object-fit: cover;
+
+  }
+  
+  &_infoElement {
+    opacity: 0;
+    text-align: center;
+    
+    &_show {
+      animation: show-info 1s forwards 0.2s;
+    }
+  }
+}
+
+
+@keyframes show-info {
+  0% {
+    opacity: 0;
+    transform: translate(0, 20px);
+    // width: 100%;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0px);
+    // width: 150%;
+  }
+}
+
+.swiper-wrapper {
+  transition-timing-function: linear !important;
+}
