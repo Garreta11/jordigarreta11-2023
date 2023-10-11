@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 const PageWrapper = ({ children }) => {
 
     const pathname = usePathname();
-    console.log(pathname)
 
     return (
         <AnimatePresence>
