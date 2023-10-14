@@ -30,7 +30,7 @@ const LabPage = () => {
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={8}
+                    slidesPerView={7}
                     spaceBetween={30}
                     loop={true}
                     freeMode={true}

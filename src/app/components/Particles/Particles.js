@@ -3,117 +3,158 @@ import styles from './Particles.module.scss'
 import { useEffect, useRef, useMemo, useState } from 'react'
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber'
 import { shaderMaterial, OrbitControls } from '@react-three/drei';
-import * as THREE from 'three'
-
-import TouchTexture from "../TouchTexture/TouchTexture";
-
-const WIDTH = 16
-const HEIGHT = 9
+import { useControls } from 'leva'
 
 const ParticleMaterial = shaderMaterial(
     {
-        uRandom: 0.1,
-        uSizePart: 0.1,
-        uTouch: null,
-        uTime: 0,
-        uDepth: 0.0,
+        uFrequency: 0.0,
+        uAmplitude: 0.0,
+        uMaxDistance: 1.783,
+        uSphere: 1.0,
         uSize: 0.0,
-        uTextureSize: new THREE.Vector2(0, 0)
+        uTime: 0.0,
+        uSpeed: 0.0
     },
     // vertex shader
     /*glsl*/`
-        attribute float pindex;
-        attribute vec3 offset;
-        attribute float angle;
-
-        uniform float uSizePart;
-        uniform float uRandom;
-        uniform float uTime;
-        uniform float uDepth;
+        uniform float uFrequency;
+        uniform float uAmplitude;
+        uniform float uMaxDistance;
+        uniform float uSphere;
         uniform float uSize;
-        uniform vec2 uTextureSize;
+        uniform float uTime;
+        uniform float uSpeed;
 
-        uniform float scale;
-
-        float random(float n) {
-            return fract(sin(n) * 43758.5453123);
+        vec3 mod289(vec3 x) {
+            return x - floor(x * (1.0 / 289.0)) * 289.0;
+        }
+        
+        vec2 mod289(vec2 x) {
+            return x - floor(x * (1.0 / 289.0)) * 289.0;
+        }
+        
+        vec3 permute(vec3 x) {
+            return mod289(((x*34.0)+1.0)*x);
         }
 
-        // Simplex 2D noise
-        vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
-        
-        float snoise(vec2 v){
-            const vec4 C = vec4(0.211324865405187, 0.366025403784439,
-                -0.577350269189626, 0.024390243902439);
-            
+        float noise(vec2 v) {
+            const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                            0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                            -0.577350269189626,  // -1.0 + 2.0 * C.x
+                            0.024390243902439); // 1.0 / 41.0
+            // First corner
             vec2 i  = floor(v + dot(v, C.yy) );
             vec2 x0 = v -   i + dot(i, C.xx);
+        
+            // Other corners
             vec2 i1;
+            //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
+            //i1.y = 1.0 - i1.x;
             i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+            // x0 = x0 - 0.0 + 0.0 * C.xx ;
+            // x1 = x0 - i1 + 1.0 * C.xx ;
+            // x2 = x0 - 1.0 + 2.0 * C.xx ;
             vec4 x12 = x0.xyxy + C.xxzz;
             x12.xy -= i1;
-            i = mod(i, 289.0);
+        
+            // Permutations
+            i = mod289(i); // Avoid truncation effects in permutation
             vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
                 + i.x + vec3(0.0, i1.x, 1.0 ));
-            
+        
             vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
             m = m*m ;
             m = m*m ;
+        
+            // Gradients: 41 points uniformly over a line, mapped onto a diamond.
+            // The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
+        
             vec3 x = 2.0 * fract(p * C.www) - 1.0;
             vec3 h = abs(x) - 0.5;
             vec3 ox = floor(x + 0.5);
             vec3 a0 = x - ox;
+        
+            // Normalise gradients implicitly by scaling m
+            // Approximation of: m *= inversesqrt( a0*a0 + h*h );
             m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+        
+            // Compute final noise value at P
             vec3 g;
             g.x  = a0.x  * x0.x  + h.x  * x0.y;
             g.yz = a0.yz * x12.xz + h.yz * x12.yw;
             return 130.0 * dot(m, g);
         }
+            
+        vec3 curl(float	x,	float	y,	float	z) {
+                
+            float	eps	= 1., eps2 = 2. * eps;
+            float	n1,	n2,	a,	b;
+        
+            x += uTime * uSpeed;
+            y += uTime * uSpeed;
+            z += uTime * uSpeed;
+        
+            vec3	curl = vec3(0.);
+        
+            n1	=	noise(vec2( x,	y	+	eps ));
+            n2	=	noise(vec2( x,	y	-	eps ));
+            a	=	(n1	-	n2)/eps2;
+        
+            n1	=	noise(vec2( x,	z	+	eps));
+            n2	=	noise(vec2( x,	z	-	eps));
+            b	=	(n1	-	n2)/eps2;
+        
+            curl.x	=	a	-	b;
+        
+            n1	=	noise(vec2( y,	z	+	eps));
+            n2	=	noise(vec2( y,	z	-	eps));
+            a	=	(n1	-	n2)/eps2;
+        
+            n1	=	noise(vec2( x	+	eps,	z));
+            n2	=	noise(vec2( x	+	eps,	z));
+            b	=	(n1	-	n2)/eps2;
+        
+            curl.y	=	a	-	b;
+        
+            n1	=	noise(vec2( x	+	eps,	y));
+            n2	=	noise(vec2( x	-	eps,	y));
+            a	=	(n1	-	n2)/eps2;
+        
+            n1	=	noise(vec2(  y	+	eps,	z));
+            n2	=	noise(vec2(  y	-	eps,	z));
+            b	=	(n1	-	n2)/eps2;
+        
+            curl.z	=	a	-	b;
+        
+            return	curl;
+        }
 
         void main() {
+            
             #include <begin_vertex>
 
-            float grey = 0.5;
+            float f = uFrequency;
+            float amplitude = uAmplitude;
+            float maxDistance = uMaxDistance;
 
-            // displacement
-            vec3 displaced = offset;
+            vec3 target = position + amplitude * curl(f * transformed.x, f * transformed.y, f * transformed.z);
+            float d = length(transformed - target) / maxDistance;
+            transformed = mix(position, target, pow(d, uSphere)) * uSize;
 
-            // randomise
-            displaced.xy += vec2(random(pindex) - 0.5, random(offset.x + pindex) - 0.5) * uRandom;
-            float rndz = (random(pindex) + snoise(vec2(pindex * 0.1, uTime * 0.1)));
-            displaced.z += rndz * (random(pindex) * 2.0 * uDepth);
-
-            // center
-            displaced.xy -= uTextureSize * 0.5;
-
-            // particle size
-            float psize = (snoise(vec2(uTime, pindex) * 0.5) + 2.0);
-            psize *= max(grey, 0.2);
-            psize *= uSize;
-
-            // final position
-            vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
-            mvPosition.xyz += position * psize;
+            vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.0);
             vec4 finalPosition = projectionMatrix * mvPosition;
 
             gl_Position = finalPosition;
-            gl_PointSize = uSizePart;
+            gl_PointSize = 1.;
         }
-
     `,
+
     // fragment shader
     /*glsl*/`
-        float circle(vec2 uv, float border) {
-            float radius = 0.5;
-            float dist = radius - distance(uv, vec2(0.5));
-            return smoothstep(0.0, border, dist);
-        }
-
         void main() {
-            vec4 color = vec4(1.0, 0.0, 0.0, 1.0);
-            
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+
             gl_FragColor = color;
-            gl_FragColor.a *= circle(gl_PointCoord, 0.2);
         }
     `
 )
@@ -123,136 +164,70 @@ extend({ ParticleMaterial })
 
 const Particles = () => {
 
-    console.log("particles")
+    console.log("** particles **")
 
     return (
         <div className={styles.particles}>
-            <Canvas camera={{ position: [0, 0, 5] }}>
+            <Canvas camera={{ position: [0, 0, 2] }}>
                 <OrbitControls />
-                <directionalLight position={[1, 1, 1]} />
-                <ambientLight intensity={1} color="#b0b0b0"/>
-                <Scene />
+                <Lights />
+                <Mesh />
             </Canvas>
         </div>
     )
 }
 
-const Scene = () => {
+const Lights = () => {
+    return (
+        <>
+            <ambientLight color="#404040"/>
+            <directionalLight position={[1, 1, 1]} />
+        </>
+    )
+}
 
-    const { camera, mouse } = useThree();
+const Mesh = () => {
 
-    const particlesRef = useRef()
-    const touchRef = useRef()
-    const particlesMatRef = useRef()
+    const meshRef = useRef()
+    const matRef = useRef()
 
-    const [touchTexture, setTouchTexture] = useState()
-    const [hovered, setHovered] = useState();
-
-    const [widthTexture, setWidthTexture] = useState(WIDTH)
-    const [heightTexture, setHeightTexture] = useState(HEIGHT)
-
-    const raycaster = new THREE.Raycaster();
-
-    const customBufferGeometry = useMemo(() => {
-
-        const numPoints = WIDTH * HEIGHT
-
-        setWidthTexture(WIDTH)
-        setHeightTexture(HEIGHT)
-
-        const geometry = new THREE.InstancedBufferGeometry();
-        
-        // positions
-        const positions = new THREE.BufferAttribute(new Float32Array(4 * 3), 3);
-        positions.setXYZ(0, -0.5, 0.5, 0.0);
-        positions.setXYZ(1, 0.5, 0.5, 0.0);
-        positions.setXYZ(2, -0.5, -0.5, 0.0);
-        positions.setXYZ(3, 0.5, -0.5, 0.0);
-        geometry.setAttribute('position', positions);
-
-        // uvs
-        const uvs = new THREE.BufferAttribute(new Float32Array(4 * 2), 2);
-        uvs.setXYZ(0, 0.0, 0.0);
-        uvs.setXYZ(1, 1.0, 0.0);
-        uvs.setXYZ(2, 0.0, 1.0);
-        uvs.setXYZ(3, 1.0, 1.0);
-        geometry.setAttribute('uv', uvs);
-
-        // index
-        geometry.setIndex(new THREE.BufferAttribute(new Uint16Array([ 0, 2, 1, 2, 3, 1 ]), 1));
-
-        const indices = new Uint16Array(numPoints);
-        const offsets = new Float32Array(numPoints * 3);
-        const angles = new Float32Array(numPoints);
-
-        for (let i = 0, j = 0; i < numPoints; i++) {
-
-            offsets[j * 3 + 0] = i % WIDTH;
-            offsets[j * 3 + 1] = Math.floor(i / WIDTH);
-        
-            indices[j] = i;
-        
-            angles[j] = Math.random() * Math.PI;
-
-            j++;
-        }
-
-        geometry.setAttribute('pindex', new THREE.InstancedBufferAttribute(indices, 1, false));
-        geometry.setAttribute('offset', new THREE.InstancedBufferAttribute(offsets, 3, false));
-        geometry.setAttribute('angle', new THREE.InstancedBufferAttribute(angles, 1, false));        
-
-        setTouchTexture(new TouchTexture(this))
-
-        return geometry;
-    }, [WIDTH, HEIGHT])
-
-    useFrame(({ clock }) => {
-        // const time = clock.elapsedTime;
-        // particlesMatRef.current.uniforms.uTime.value = time;
-
-        // if (touchTexture) {
-        //     touchTexture.update()
-        //     // particlesRef.current.material.uniforms.uTouch.value = touchTexture.texture;
-
-        //     raycaster.setFromCamera(mouse, camera);
-        //     const intersects = raycaster.intersectObject(touchRef.current);
-        //     if (intersects.length > 0) {
-        //         const intersectionUV = intersects[0].uv;
-        //         if (touchTexture) touchTexture.addTouch(intersectionUV);
-        //     }
-        // }
+    const particles = useControls({
+        speedRotation: { value: 0.0, min: 0.0, max: 1.0, step: 0.001 }
     })
 
-    return(
+    const options = useMemo(() => {
+        return {
+          uSize: { value: 0.596, min: 0.05, max: 2.0, step: 0.0001 },
+          uSpeed: { value: 0.3, min: 0.0001, max: 0.5, step: 0.0001},
+          uFrequency: { value: 0.7, min: 0.7, max: 7.0, step: 0.001 },
+          uAmplitude: { value: 0.3, min: 0.0, max: 4.0, step: 0.001 },
+          uMaxDistance: { value: 1.783, min: 0.0, max: 4.0, step: 0.001 },
+        }
+    }, [])
+    const curlNoise = useControls('Curl Noise', options)
+
+    useFrame((state, delta) => {
+
+        const elapsedTime = state.clock.elapsedTime
+        matRef.current.uniforms.uTime.value = elapsedTime
+
+        meshRef.current.rotation.y -= delta * particles.speedRotation
+
+    })
+
+    return (
         <>
-            {/* <points
-                ref={particlesRef}
-                position={[0, 0, 0]}
-            >
-                <instancedBufferGeometry attach="geometry" {...customBufferGeometry} />
+            <points ref={meshRef}>
+                <icosahedronGeometry args={[1, 50]} />
                 <particleMaterial
-                    ref={particlesMatRef}
-                    uSizePart={3.5}
-                    uTextureSize={new THREE.Vector2(widthTexture, heightTexture)}
+                    ref={matRef}
+                    uSize={curlNoise.uSize}
+                    uSpeed={curlNoise.uSpeed}
+                    uFrequency={curlNoise.uFrequency}
+                    uAmplitude={curlNoise.uAmplitude}
+                    uMaxDistance={curlNoise.uMaxDistance}
                 />
-            </points> */}
-
-            <mesh>
-                <boxGeometry />
-                <meshStandardMaterial />                
-            </mesh>
-
-            {/* {touchTexture && (
-                <mesh
-                    ref={touchRef}
-                    onPointerOver={() => setHovered(true)}
-                    onPointerOut={() => setHovered(false)}
-                    visible={true}
-                >
-                    <planeGeometry attach="geometry" args={[widthTexture, heightTexture]} />
-                    <meshStandardMaterial map={touchTexture.texture}/>
-                </mesh>
-            )} */}
+            </points>
         </>
     )
 }

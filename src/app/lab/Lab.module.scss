@@ -14,10 +14,7 @@
 }
 
 .experiment {
-
-  &:hover {
-
-    
+  &:hover {   
     video {
       opacity: 1;
       filter: grayscale(0);
@@ -34,7 +31,7 @@
   &_videoElement {
     position: relative;
     opacity: 0.5;
-    filter: grayscale(1);
+    /* S */
     transform: scale(1);
     transition: all ease 0.5s;
     z-index: 0;

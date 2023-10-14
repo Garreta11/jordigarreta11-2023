@@ -333,6 +333,8 @@ const Project = ({categories, project, index, tunnel}) => {
         // console.log('click', project)
     }
 
+    console.log(project)
+
     return(
         <group
             onClick={handleClick}

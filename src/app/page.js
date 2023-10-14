@@ -25,7 +25,7 @@ export default function Home() {
       className={styles.main}
     >
     
-      {/* <Particles /> */}
+      <Particles />
 
       <div className={styles['home--wrapper']}>
           {links.map(({label, route}) => {
