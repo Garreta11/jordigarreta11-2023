@@ -173,11 +173,13 @@ const WorkPage = () => {
                                 const parsedEntity = parser.parseFromString(project.title.rendered, "text/html");
                                 const t = parsedEntity.documentElement.textContent;
                                 return(
-                                    <div key={index} className={styles.main_list_container_element}>
-                                        <Link href={`/work/${project.slug}`}>
-                                            <p className={styles.main_list_container_title}>{t}</p>
-                                        </Link>
-                                    </div>
+                                    <>
+                                        <div key={index} className={styles.main_list_container_element}>
+                                            <Link href={`/work/${project.slug}`}>
+                                                <p className={styles.main_list_container_title}>{t}</p>
+                                            </Link>
+                                        </div>
+                                    </>
                                 )
                             })}
                         </div>
@@ -316,6 +318,8 @@ const Project = ({categories, project, index, tunnel}) => {
         // video preview
         setVideoPreview(project.acf.video.imatge_preview.url)
 
+        console.log(project.acf.video.video.url)
+
         if (categories && project) {
             for (let i = 0; i < project.categories.length; i++) {
                 for (let j = 0; j < categories.length; j++) {
@@ -327,25 +331,18 @@ const Project = ({categories, project, index, tunnel}) => {
         }
     }, [project, categories])
 
-    const handleClick = (e) => {
-        e.stopPropagation()
-        // console.log(event)
-        // console.log('click', project)
-    }
-
-    console.log(project)
-
     return(
         <group
-            onClick={handleClick}
             position={[0, 0, -index * DISTANCE]}
         >
 
             { video && (
                 <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
+                    {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
                         <VideoMaterial url={video} />
-                    </Suspense>
+                    </Suspense> */}
+                    <VideoMaterial url={video} />
+                    {/* <meshStandardMaterial color='red'/> */}
                 </Plane>
             )}
 

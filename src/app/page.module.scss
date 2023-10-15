@@ -38,9 +38,11 @@
       }
 
       &--item {
+        position: relative;
+        z-index: 1;
         a {
           -webkit-text-stroke: 1px var(--color-one);
-          color: transparent;
+          color: var(--color-two);
           font-size: 12em;
           transition: color ease 0.3s;
           font-weight: 500;

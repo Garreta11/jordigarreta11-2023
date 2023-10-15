@@ -145,14 +145,14 @@ const ParticleMaterial = shaderMaterial(
             vec4 finalPosition = projectionMatrix * mvPosition;
 
             gl_Position = finalPosition;
-            gl_PointSize = 1.;
+            gl_PointSize = 1.5;
         }
     `,
 
     // fragment shader
     /*glsl*/`
         void main() {
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+            vec4 color = vec4(0.18, 0.18, 0.18, 1.0);
 
             gl_FragColor = color;
         }
@@ -161,10 +161,12 @@ const ParticleMaterial = shaderMaterial(
 
 extend({ ParticleMaterial })
 
+const mapValue = (value, fromLow, fromHigh, toLow, toHigh) => {
+    return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
+}
+
 
 const Particles = () => {
-
-    console.log("** particles **")
 
     return (
         <div className={styles.particles}>
@@ -192,7 +194,7 @@ const Mesh = () => {
     const matRef = useRef()
 
     const particles = useControls({
-        speedRotation: { value: 0.0, min: 0.0, max: 1.0, step: 0.001 }
+        speedRotation: { value: 0.1, min: 0.0, max: 1.0, step: 0.001 }
     })
 
     const options = useMemo(() => {
@@ -200,19 +202,25 @@ const Mesh = () => {
           uSize: { value: 0.596, min: 0.05, max: 2.0, step: 0.0001 },
           uSpeed: { value: 0.3, min: 0.0001, max: 0.5, step: 0.0001},
           uFrequency: { value: 0.7, min: 0.7, max: 7.0, step: 0.001 },
-          uAmplitude: { value: 0.3, min: 0.0, max: 4.0, step: 0.001 },
-          uMaxDistance: { value: 1.783, min: 0.0, max: 4.0, step: 0.001 },
+          uAmplitude: { value: 0.3, min: 0.3, max: 1.0, step: 0.001 },
+          uMaxDistance: { value: 1.0, min: 0.1, max: 1.0, step: 0.001 },
         }
     }, [])
     const curlNoise = useControls('Curl Noise', options)
 
     useFrame((state, delta) => {
 
+        // uTime
         const elapsedTime = state.clock.elapsedTime
         matRef.current.uniforms.uTime.value = elapsedTime
 
+        // speedRotation
         meshRef.current.rotation.y -= delta * particles.speedRotation
 
+        // uAmplitude and uMaxDistance
+        console.log(state.mouse)
+        matRef.current.uniforms.uAmplitude.value = mapValue(state.mouse.x, -1, 1, 0.3, 1);
+        matRef.current.uniforms.uMaxDistance.value = mapValue(state.mouse.y, -1, 1, 0.5, 1);
     })
 
     return (
@@ -224,8 +232,7 @@ const Mesh = () => {
                     uSize={curlNoise.uSize}
                     uSpeed={curlNoise.uSpeed}
                     uFrequency={curlNoise.uFrequency}
-                    uAmplitude={curlNoise.uAmplitude}
-                    uMaxDistance={curlNoise.uMaxDistance}
+                    transparent
                 />
             </points>
         </>
