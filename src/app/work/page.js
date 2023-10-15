@@ -10,8 +10,8 @@ import styles from './Work.module.scss'
 import { useEffect, useState, useRef, Suspense } from 'react';
 
 // react three fiber / drei
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, ScrollControls, Center, Text3D, Plane, useTexture, useVideoTexture, useScroll, Clone, Environment, Stage, Text, Html } from '@react-three/drei';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
+import { ScrollControls, Plane, useTexture, useVideoTexture, useScroll, Environment, Html, Center} from '@react-three/drei';
 
 // gsap
 import gsap from "gsap";
@@ -173,13 +173,11 @@ const WorkPage = () => {
                                 const parsedEntity = parser.parseFromString(project.title.rendered, "text/html");
                                 const t = parsedEntity.documentElement.textContent;
                                 return(
-                                    <>
-                                        <div key={index} className={styles.main_list_container_element}>
-                                            <Link href={`/work/${project.slug}`}>
-                                                <p className={styles.main_list_container_title}>{t}</p>
-                                            </Link>
-                                        </div>
-                                    </>
+                                    <div key={index} className={styles.main_list_container_element}>
+                                        <Link href={`/work/${project.slug}`}>
+                                            <p className={styles.main_list_container_title}>{t}</p>
+                                        </Link>
+                                    </div>
                                 )
                             })}
                         </div>
@@ -190,7 +188,7 @@ const WorkPage = () => {
                             <path d="M841.169 473.038L841.169 468.371C839.344 460.273 834.767 453.057 828.217 447.951C821.666 442.846 813.548 440.166 805.243 440.369L158.568 440.369C149.039 440.369 139.901 444.151 133.164 450.884C126.426 457.617 122.641 466.748 122.641 476.269C122.641 485.79 126.426 494.922 133.164 501.654C139.901 508.387 149.039 512.169 158.568 512.169L805.243 512.169C814.771 512.169 823.909 508.387 830.647 501.654C837.384 494.922 841.169 485.79 841.169 476.269L841.169 473.038Z" fill="#2F2F2F"/>
                             <path d="M744 341.664L744 338.285C742.669 332.421 739.331 327.195 734.554 323.498C729.777 319.801 723.856 317.861 717.8 318.008L246.2 318.008C239.251 318.008 232.587 320.747 227.674 325.622C222.76 330.497 220 337.109 220 344.004C220 350.898 222.76 357.511 227.674 362.386C232.587 367.261 239.251 370 246.2 370L717.8 370C724.749 370 731.413 367.261 736.326 362.386C741.24 357.511 744 350.898 744 344.004L744 341.664Z" fill="#2F2F2F"/>
                             <path d="M744 606.664L744 603.285C742.669 597.421 739.331 592.195 734.554 588.498C729.777 584.801 723.856 582.861 717.8 583.008L246.2 583.008C239.251 583.008 232.587 585.747 227.674 590.622C222.76 595.497 220 602.109 220 609.004C220 615.898 222.76 622.511 227.674 627.386C232.587 632.261 239.251 635 246.2 635L717.8 635C724.749 635 731.413 632.261 736.326 627.386C741.24 622.511 744 615.898 744 609.004L744 606.664Z" fill="#2F2F2F"/>
-                            <circle cx="482" cy="482" r="463" stroke="#2F2F2F" stroke-width="38"/>
+                            <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="38"/>
                         </svg>
 
                     </div>
@@ -318,8 +316,6 @@ const Project = ({categories, project, index, tunnel}) => {
         // video preview
         setVideoPreview(project.acf.video.imatge_preview.url)
 
-        console.log(project.acf.video.video.url)
-
         if (categories && project) {
             for (let i = 0; i < project.categories.length; i++) {
                 for (let j = 0; j < categories.length; j++) {
@@ -338,11 +334,9 @@ const Project = ({categories, project, index, tunnel}) => {
 
             { video && (
                 <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
+                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
                         <VideoMaterial url={video} />
-                    </Suspense> */}
-                    <VideoMaterial url={video} />
-                    {/* <meshStandardMaterial color='red'/> */}
+                    </Suspense>
                 </Plane>
             )}
 
@@ -355,7 +349,7 @@ const FallbackMaterial = ({url}) => {
     const texture = useTexture(url)
     return (
         <>
-            {url && (
+            {texture && (
                 <meshBasicMaterial map={texture} toneMapped={false} />
             )}
         </>
@@ -367,7 +361,7 @@ const VideoMaterial = ({url}) => {
     const texture = useVideoTexture(url)
     return (
         <>
-            {url && (
+            {texture && (
                 <meshBasicMaterial map={texture} toneMapped={false} />
             )}
         </>

@@ -200,7 +200,7 @@ const Mesh = () => {
     const options = useMemo(() => {
         return {
           uSize: { value: 0.596, min: 0.05, max: 2.0, step: 0.0001 },
-          uSpeed: { value: 0.3, min: 0.0001, max: 0.5, step: 0.0001},
+          uSpeed: { value: 0.2, min: 0.0001, max: 0.5, step: 0.0001},
           uFrequency: { value: 0.7, min: 0.7, max: 7.0, step: 0.001 },
           uAmplitude: { value: 0.3, min: 0.3, max: 1.0, step: 0.001 },
           uMaxDistance: { value: 1.0, min: 0.1, max: 1.0, step: 0.001 },
@@ -218,7 +218,6 @@ const Mesh = () => {
         meshRef.current.rotation.y -= delta * particles.speedRotation
 
         // uAmplitude and uMaxDistance
-        console.log(state.mouse)
         matRef.current.uniforms.uAmplitude.value = mapValue(state.mouse.x, -1, 1, 0.3, 1);
         matRef.current.uniforms.uMaxDistance.value = mapValue(state.mouse.y, -1, 1, 0.5, 1);
     })

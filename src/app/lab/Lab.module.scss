@@ -1,15 +1,17 @@
 .labpage {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 170px);
   display: flex;
-  align-items: center;   
+  align-items: center;
+  position: relative;
+  top: 100px;
 }
 
 .swiperslide {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: calc(100vh - 170px);
     position: relative;
 }
 
