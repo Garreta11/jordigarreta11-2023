@@ -195,16 +195,16 @@ const Mesh = () => {
     const matRef = useRef()
 
     const particles = useControls({
-        speedRotation: { value: 0.1, min: 0.0, max: 1.0, step: 0.001 }
+        speedRotation: { value: 1., min: 0.0, max: 1.0, step: 0.001 }
     })
 
     const options = useMemo(() => {
         return {
           uSize: { value: 0.596, min: 0.05, max: 2.0, step: 0.0001 },
-          uSpeed: { value: 0.2, min: 0.0001, max: 0.5, step: 0.0001},
+          uSpeed: { value: 0.1, min: 0.0001, max: 0.5, step: 0.0001},
           uFrequency: { value: 0.7, min: 0.7, max: 7.0, step: 0.001 },
           uAmplitude: { value: 0.3, min: 0.3, max: 1.0, step: 0.001 },
-          uMaxDistance: { value: 1.0, min: 0.1, max: 1.0, step: 0.001 },
+          uMaxDistance: { value: 0.1, min: 0.1, max: 1.0, step: 0.001 },
         }
     }, [])
     const curlNoise = useControls('Curl Noise', options)
@@ -219,8 +219,14 @@ const Mesh = () => {
         meshRef.current.rotation.y -= delta * particles.speedRotation
 
         // uAmplitude and uMaxDistance
-        matRef.current.uniforms.uAmplitude.value = mapValue(state.mouse.x, -1, 1, 0.3, 1);
-        matRef.current.uniforms.uMaxDistance.value = mapValue(state.mouse.y, -1, 1, 0.5, 1);
+        const newAmplitude = mapValue(state.mouse.x, -1, 1, -0.5, 0.5)
+        gsap.to(matRef.current.uniforms.uAmplitude, {
+            value: newAmplitude
+        })
+        const newFreq = mapValue(state.mouse.y, -1, 1, 0, 1)
+        gsap.to(matRef.current.uniforms.uFrequency, {
+            value: newFreq
+        })
     })
 
     return (
@@ -231,7 +237,8 @@ const Mesh = () => {
                     ref={matRef}
                     uSize={curlNoise.uSize}
                     uSpeed={curlNoise.uSpeed}
-                    uFrequency={curlNoise.uFrequency}
+                    // uFrequency={curlNoise.uFrequency}
+                    uMaxDistance={curlNoise.uMaxDistance}
                     transparent
                 />
             </points>
