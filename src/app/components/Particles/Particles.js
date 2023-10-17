@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo, useState } from 'react'
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber'
 import { shaderMaterial, OrbitControls } from '@react-three/drei';
 import { useControls } from 'leva'
+import gsap from 'gsap'
 
 const ParticleMaterial = shaderMaterial(
     {
