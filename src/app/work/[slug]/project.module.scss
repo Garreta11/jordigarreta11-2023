@@ -64,7 +64,7 @@
         margin-bottom: 50px;
 
         @include sm {
-            flex-direction: column;
+            flex-direction: column-reverse;
             margin-bottom: 30px;
         }
 
@@ -76,6 +76,10 @@
                 width: 100%;
                 font-size: 1em;
                 font-weight: 500;
+            }
+
+            p {
+                margin-bottom: 30px;
             }
         }
 
@@ -94,6 +98,10 @@
             top: 0px;
             height: fit-content;
             width: 30%;
+            @include sm {
+                position: initial;
+                width: 100%;
+            }
         }
 
     }

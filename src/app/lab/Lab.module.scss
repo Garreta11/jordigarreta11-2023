@@ -1,3 +1,5 @@
+@use '../_styles/breakpoints.scss' as *;
+
 .labpage {
   width: 100vw;
   height: calc(100vh - 170px);
@@ -5,6 +7,10 @@
   align-items: center;
   position: relative;
   top: 100px;
+
+  @include sm {
+    height: calc(100vh - 210px);
+  }
 }
 
 .swiperslide {
@@ -16,17 +22,25 @@
 }
 
 .experiment {
-  &:hover {   
+  &:hover {
     video {
       opacity: 1;
       filter: grayscale(0);
       width: 150%;
       z-index: 10;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+      @include sm {
+        width: 100%;
+      }
     }
 
     .experiment_infoElement {
       width: 150%;
+
+      @include sm {
+        width: 100%;
+      }
     }
   }
 
@@ -47,6 +61,10 @@
     max-height: calc(100vh - 200px);
     object-fit: cover;
 
+    @include sm {
+      opacity: 1;
+    }
+
   }
   
   &_infoElement {
@@ -55,6 +73,13 @@
     
     &_show {
       animation: show-info 1s forwards 0.2s;
+      @include sm {
+        animation: none;
+      }
+    }
+
+    @include sm {
+      opacity: 1;
     }
   }
 }

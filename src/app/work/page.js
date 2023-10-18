@@ -186,7 +186,7 @@ const WorkPage = () => {
 
                     <div className={styles.main_list}>
                         <svg className={styles.main_list_icon} onClick={handleClickList} width="964" height="964" viewBox="0 0 964 964" fill="none" xmlns="http://www.w3.org/2000/svg">
-
+                            <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="38"/>
                             {isListOpen ? (
                                 <>
                                     <path d="M374.541 365.423L598.566 589.449" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
@@ -199,7 +199,6 @@ const WorkPage = () => {
                                     <path d="M235 494H751" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
                                 </>
                             )}
-                            <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="38"/>
                         </svg>
 
                         <p className={styles.main_list_text}>{isListOpen ? 'Close' : 'All projects'}</p>

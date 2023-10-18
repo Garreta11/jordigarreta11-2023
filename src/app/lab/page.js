@@ -25,12 +25,30 @@ const LabPage = () => {
         fetchData()
     }, [])
 
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        function handleResize() {
+            if (window.innerWidth < 921) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        }
+
+        handleResize(); // Check initial size
+        window.addEventListener('resize', handleResize); // Attach event listener
+
+        return () => {
+            window.removeEventListener('resize', handleResize); // Remove event listener on unmount
+        };
+    }, []);
+
     return(
         <motion.main className={styles.labpage}>     
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={7}
+                    slidesPerView={isMobile ? 2 : 7}
                     spaceBetween={30}
                     loop={true}
                     freeMode={true}
@@ -44,7 +62,7 @@ const LabPage = () => {
                                 className={styles.swiperslide}
                                 key={index}
                             >
-                                <Experiment experiment={experiment} />
+                                <Experiment experiment={experiment} isMobile={isMobile}/>
                             </SwiperSlide>
                         )
                     })}
@@ -55,7 +73,7 @@ const LabPage = () => {
     )
 }
 
-const Experiment = ({ experiment }) => {
+const Experiment = ({ experiment, isMobile }) => {
 
     const infoRef = useRef()
     const [showInfo, setShowInfo] = useState(false)
@@ -87,6 +105,7 @@ const Experiment = ({ experiment }) => {
                 src={experiment.acf.file.url}
                 loop
                 muted
+                autoPlay={isMobile ? true : false}
             >
                 <source src={experiment.acf.file.url} type="video/mp4" />
             </video>
