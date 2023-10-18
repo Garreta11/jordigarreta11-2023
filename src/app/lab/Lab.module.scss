@@ -11,6 +11,18 @@
   @include sm {
     height: calc(100vh - 210px);
   }
+
+  &_tech {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 2em;
+
+    @include sm {
+      display: none;
+    }
+
+  }
 }
 
 .swiperslide {
@@ -70,6 +82,8 @@
   &_infoElement {
     opacity: 0;
     text-align: center;
+
+    display: none;
     
     &_show {
       animation: show-info 1s forwards 0.2s;
@@ -79,6 +93,7 @@
     }
 
     @include sm {
+      display: block;
       opacity: 1;
     }
   }

@@ -43,12 +43,18 @@ const LabPage = () => {
         };
     }, []);
 
+    const [tech, setTech] = useState("");
+
+    const handleTech = (_tech) => {
+        setTech(_tech);
+    }
+
     return(
         <motion.main className={styles.labpage}>     
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={isMobile ? 2 : 7}
+                    slidesPerView={isMobile ? 2 : 8}
                     spaceBetween={30}
                     loop={true}
                     freeMode={true}
@@ -62,28 +68,32 @@ const LabPage = () => {
                                 className={styles.swiperslide}
                                 key={index}
                             >
-                                <Experiment experiment={experiment} isMobile={isMobile}/>
+                                <Experiment experiment={experiment} isMobile={isMobile} handleTech={handleTech}/>
                             </SwiperSlide>
                         )
                     })}
                 </Swiper>
             )}
+            
+            <p className={styles.labpage_tech}>{tech}</p>
         
         </motion.main>
     )
 }
 
-const Experiment = ({ experiment, isMobile }) => {
+const Experiment = ({ experiment, isMobile, handleTech }) => {
 
     const infoRef = useRef()
     const [showInfo, setShowInfo] = useState(false)
 
-    const handlePointerEnter = (event) => {
+    const handlePointerEnter = (event, _tech) => {
         const targetElement = event.currentTarget
         const video = targetElement.querySelector('video')
         video.play()
 
         setShowInfo(true)
+
+        handleTech(_tech)
     }
 
     const handlePointerLeave = (event) => {
@@ -92,30 +102,34 @@ const Experiment = ({ experiment, isMobile }) => {
         video.pause()
 
         setShowInfo(false)
+
+        handleTech("")
     }
 
     return(
-        <div
-            className={styles.experiment}
-            onMouseOver={(e) => handlePointerEnter(e)}
-            onMouseLeave={(e) => handlePointerLeave(e)}
-        >
-            <video
-                className={styles.experiment_videoElement}
-                src={experiment.acf.file.url}
-                loop
-                muted
-                autoPlay={isMobile ? true : false}
-            >
-                <source src={experiment.acf.file.url} type="video/mp4" />
-            </video>
+        <>
             <div
-                ref={infoRef}
-                className={showInfo ? `${styles.experiment_infoElement} ${styles.experiment_infoElement_show}` : styles.experiment_infoElement}
+                className={styles.experiment}
+                onMouseOver={(e) => handlePointerEnter(e, experiment.acf.info.technology)}
+                onMouseLeave={(e) => handlePointerLeave(e)}
             >
-                <p>{experiment.acf.info.technology}</p>
+                <video
+                    className={styles.experiment_videoElement}
+                    src={experiment.acf.file.url}
+                    loop
+                    muted
+                    autoPlay={isMobile ? true : false}
+                >
+                    <source src={experiment.acf.file.url} type="video/mp4" />
+                </video>
+                <div
+                    ref={infoRef}
+                    className={showInfo ? `${styles.experiment_infoElement} ${styles.experiment_infoElement_show}` : styles.experiment_infoElement}
+                >
+                    <p>{experiment.acf.info.technology}</p>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
