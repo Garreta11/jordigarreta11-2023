@@ -21,6 +21,8 @@ import sources from '../sources';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 
+import * as THREE from 'three'
+
 
 // loader
 import Loader from '../components/Loader/Loader'
@@ -355,7 +357,6 @@ const Project = ({categories, project, index, tunnel}) => {
                     </Suspense>
                 </Plane>
             )}
-
         </group>
     )
 }
@@ -365,11 +366,11 @@ const FallbackMaterial = ({url}) => {
     
     const [texture, setTexture] = useState();
     const textureLoaderFallback = new TextureLoader()
-    textureLoaderFallback.crossOrigin = ""
     textureLoaderFallback.load(url, (_texture) => {
         setTexture(_texture)
-        _texture.needsUpdate = true
     });
+
+    // const texture = useTexture(url)
 
     return (
         <>
@@ -382,13 +383,30 @@ const FallbackMaterial = ({url}) => {
 
 // Video material
 const VideoMaterial = ({url}) => {
-    const [texture, setTexture] = useState();
-    const textureLoaderVideo = new TextureLoader()
-    textureLoaderVideo.crossOrigin = ""
-    textureLoaderVideo.load(url, (_texture) => {
-        setTexture(_texture)
-        _texture.needsUpdate = true
-    });
+    // const [texture, setTexture] = useState();
+    // const textureLoaderVideo = new TextureLoader()
+    // textureLoaderVideo.load(url, (_texture) => {
+    //     setTexture(_texture)
+    // });
+
+    const video = document.createElement('video')
+    video.src = url
+    video.loop = true
+    video.autoplay = true
+    video.muted = true
+    video.crossOrigin = "anonymous"
+    
+    const source = document.createElement('source')
+    source.src = url
+
+    video.appendChild(source)
+    
+    // console.log(video)
+    const texture = new THREE.VideoTexture( video );
+
+
+
+    // const texture = useVideoTexture(url)
 
     return (
         <>
