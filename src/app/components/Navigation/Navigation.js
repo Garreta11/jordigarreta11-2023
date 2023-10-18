@@ -67,11 +67,11 @@ export default function Navigation() {
                         })}
                     </ul>
                 </nav>
-                <button onClick={toggleTheme} className={styles.header_btn}>
+                {/* <button onClick={toggleTheme} className={styles.header_btn}>
                     <svg className={isDarkMode ? styles.header_btn_img : `${styles.header_btn_img} ${styles.header_btn_img_dark}`} width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M47.6284 90.5C-3.09619 87.9697 -3.09619 12.0293 47.6284 9.5C104.677 10.082 104.677 89.917 47.6284 90.5ZM52.1304 14.0449V85.9551C97.1909 83.7363 97.1909 16.2637 52.1304 14.0449Z" fill="#2F2F2F"/>
                     </svg>
-                </button>
+                </button> */}
             </div>
         </header>
     )

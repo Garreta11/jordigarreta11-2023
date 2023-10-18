@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import PageWrapper from './components/PageWrapper/PageWrapper'
 
+import { useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 import Particles from './components/Particles/Particles'
 
@@ -20,18 +21,25 @@ const links = [
 ]
 
 export default function Home() {
+
+  const [zoomParticles, setZoomParticles] = useState(false)
+
+  const handleClick = () => {
+    setZoomParticles(true)
+  }
+
   return (
     <motion.main
       className={styles.main}
     >
     
-      <Particles />
+      <Particles zoom={zoomParticles} />
 
       <div className={styles['home--wrapper']}>
           {links.map(({label, route}) => {
             return(
               <div key={route} className={styles['home--wrapper--item']}>
-                  <Link href={route}>{label}</Link>
+                  <Link onClick={handleClick} href={route}>{label}</Link>
               </div>
             )
           })}

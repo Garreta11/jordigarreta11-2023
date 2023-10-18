@@ -38,7 +38,10 @@ const ProjectPage = ({params}) => {
                     <h1 className={styles.project_title}>{project.title.rendered}</h1>
                     
                     <div className={styles.project_info}>
-                        <p className={styles.project_info_description}>{project.acf.description}</p>
+                        <div className={styles.project_info_description}>
+                            <p>{project.acf.description}</p>
+                            <div className={styles.project_images} dangerouslySetInnerHTML={{__html: project.content.rendered}}/>
+                        </div>
                         
                         <div className={styles.project_info_right}>
                             <div className={styles.project_info_credits} dangerouslySetInnerHTML={{__html: project.acf.credits}}/>
@@ -49,8 +52,6 @@ const ProjectPage = ({params}) => {
                             )}
                         </div>
                     </div>
-                    
-                    <div className={styles.project_images} dangerouslySetInnerHTML={{__html: project.content.rendered}}/>
                 </>
             )}
             

@@ -27,6 +27,8 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     justify-content: flex-start;
     align-items: center;
 
+    gap: 10px;
+
     pointer-events: none;
 
     opacity: 0;
@@ -36,9 +38,19 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       cursor: pointer;
       pointer-events: all;
       transition: all ease 0.5s;
-      width: 30px;
+      width: 50px;
       &:hover {
-        transform: scale(1.5);
+        // transform: scale(1.2);
+
+        & + p {
+          opacity: 1;
+        }
+
+      }
+
+      & + p {
+        opacity: 0;
+        transition: all ease 0.5s;
       }
 
       path {
@@ -106,6 +118,10 @@ $animationfadein: fadein ease 0.5s forwards 2s;
           background-color: var(--color-two);
           font-weight: 800;
         }
+      }
+
+      &_all {
+        margin-bottom: 50px;
       }
     }
   }
