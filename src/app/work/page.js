@@ -201,7 +201,7 @@ const WorkPage = () => {
                             )}
                         </svg>
 
-                        <p className={styles.main_list_text}>{isListOpen ? 'Close' : 'All projects'}</p>
+                        <p className={styles.main_list_text}>{isListOpen ? '' : 'All projects'}</p>
                     </div>
 
                     <Canvas
