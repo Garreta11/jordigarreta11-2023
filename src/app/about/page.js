@@ -1,6 +1,12 @@
 'use client'
 import styles from './About.module.scss'
 import { useEffect, useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+
+const transition = { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionCV = { delay: 2, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionMake = { delay: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionFriends = { delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const AboutPage = () => {
 
@@ -35,28 +41,44 @@ const AboutPage = () => {
         >
             {aboutPage && (
                 <div className={styles.about_about}>
-                    <p className={styles.about_about_description}>
+                    <motion.p
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={transition}
+                        className={styles.about_about_description}
+                    >
                         {aboutPage.acf.description}
-                    </p>
+                    </motion.p>
                     <div className={styles.about_about_info}>
-                        <div
+                        <motion.div
                             className={styles.about_about_make}
+                            initial={{opacity: 0, x: -20}}
+                            animate={{opacity: 1, x: 0}}
+                            transition={transitionMake}
                         >
                             <p>MAKE.</p>
                             <p>MAKE.</p>
                             <p>MAKE.</p>
-                        </div>
-                        <div className={styles.about_about_friends}>
+                        </motion.div>
+                        <motion.div
+                            className={styles.about_about_friends}
+                            initial={{opacity: 0, x: 20}}
+                            animate={{opacity: 1, x: 0}}
+                            transition={transitionFriends}
+                        >
                             <h2 className={styles.about_about_friends_title}>FRIENDS</h2>
                             <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             )}
             {cvPage && (
-                <div
+                <motion.div
                     id='curriculum'
                     className={styles.about_cv}
+                    initial={{opacity: 0, x: -20}}
+                    animate={{opacity: 1, x: 0}}
+                    transition={transitionCV}
                 >
                     <h1 className={styles.about_cv_title}>Curriculum</h1>
                     <div className={styles.about_cv_top}>
@@ -86,7 +108,7 @@ const AboutPage = () => {
                             <div dangerouslySetInnerHTML={{__html: cvPage.acf.contact}} />
                         </div>
                     </div>
-                </div>
+                </motion.div>
             )}
         </main>
     )
