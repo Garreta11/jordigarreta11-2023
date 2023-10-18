@@ -58,32 +58,36 @@ const WorkPage = () => {
     useEffect(() => {
         async function fetchData() {
             const res = await fetch(
-                'https://dashboard.jordigarreta.com/wp-json/wp/v2/posts'
+                'https://dashboard.jordigarreta.com/wp-json/wp/v2/posts?_embed&per_page=100',
             )
             .then(res => res.json())
             .then(data => {
                 setProjects(data);
+
+                fetchCat()
             })
         }
         fetchData()
 
         async function fetchCat() {
             const res = await fetch(
-                'https://dashboard.jordigarreta.com/wp-json/wp/v2/categories'
+                'https://dashboard.jordigarreta.com/wp-json/wp/v2/categories?_embed&per_page=100',
             )
             .then(res => res.json())
             .then(data => {
                 setCategories(data);
+
+                // load models
+                toLoad = sources.length;
+                setLoaders()
+                startLoading(sources)
             })
         }
-        fetchCat()
+        
 
 
 
-        // load models
-        toLoad = sources.length;
-        setLoaders()
-        startLoading(sources)
+        
 
     }, [])
 
@@ -189,14 +193,14 @@ const WorkPage = () => {
                             <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="38"/>
                             {isListOpen ? (
                                 <>
-                                    <path d="M374.541 365.423L598.566 589.449" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
-                                    <path d="M365.423 589.449L589.449 365.423" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
+                                    <path d="M374.541 365.423L598.566 589.449" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
+                                    <path d="M365.423 589.449L589.449 365.423" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
                                 </>
                             ) : (
                                 <>
-                                    <path d="M235 597H751" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
-                                    <path d="M235 392H751" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
-                                    <path d="M235 494H751" stroke="#2F2F2F" stroke-width="40" stroke-linecap="round"/>
+                                    <path d="M235 597H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
+                                    <path d="M235 392H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
+                                    <path d="M235 494H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
                                 </>
                             )}
                         </svg>
@@ -373,7 +377,7 @@ const VideoMaterial = ({url}) => {
     return (
         <>
             {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
+                <meshBasicMaterial toneMapped={false} />
             )}
         </>
     )

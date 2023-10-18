@@ -18,7 +18,7 @@
     "framer-motion-3d": "^10.16.4",
     "gsap": "^3.12.2",
     "leva": "^0.9.35",
-    "next": "^13.5.4",
+    "next": "^13.5.6-canary.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-webcam": "^7.1.1",
