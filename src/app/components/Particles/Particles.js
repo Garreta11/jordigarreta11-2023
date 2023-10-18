@@ -172,7 +172,7 @@ const Particles = ({zoom}) => {
     return (
         <div className={styles.particles}>
             <Canvas camera={{ position: [0, 0, 2] }}>
-                <OrbitControls />
+                {/* <OrbitControls /> */}
                 <Lights />
                 <Mesh zoom={zoom}/>
             </Canvas>
