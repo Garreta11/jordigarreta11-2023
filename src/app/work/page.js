@@ -18,8 +18,9 @@ import gsap from "gsap";
 
 // sources
 import sources from '../sources';
-import { TextureLoader } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+
 
 // loader
 import Loader from '../components/Loader/Loader'
@@ -361,7 +362,15 @@ const Project = ({categories, project, index, tunnel}) => {
 
 // Fallback material
 const FallbackMaterial = ({url}) => {
-    const texture = useTexture(url)
+    
+    const [texture, setTexture] = useState();
+    const textureLoaderFallback = new TextureLoader()
+    textureLoaderFallback.crossOrigin = ""
+    textureLoaderFallback.load(url, (_texture) => {
+        setTexture(_texture)
+        _texture.needsUpdate = true
+    });
+
     return (
         <>
             {texture && (
@@ -373,11 +382,18 @@ const FallbackMaterial = ({url}) => {
 
 // Video material
 const VideoMaterial = ({url}) => {
-    const texture = useVideoTexture(url)
+    const [texture, setTexture] = useState();
+    const textureLoaderVideo = new TextureLoader()
+    textureLoaderVideo.crossOrigin = ""
+    textureLoaderVideo.load(url, (_texture) => {
+        setTexture(_texture)
+        _texture.needsUpdate = true
+    });
+
     return (
         <>
             {texture && (
-                <meshBasicMaterial toneMapped={false} />
+                <meshBasicMaterial map={texture} toneMapped={false} />
             )}
         </>
     )
