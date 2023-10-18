@@ -85,8 +85,11 @@
 
       &_top {
         columns: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         @include sm {
           columns: 1;
+          grid-template-columns: 1fr;
         }
       }
 
@@ -106,6 +109,12 @@
         font-weight: 100;
         font-size: 2em;
         text-transform: uppercase;
+      }
+
+      &_skills {
+        div {
+          columns: 2;
+        }
       }
 
     }
