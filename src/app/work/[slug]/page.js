@@ -2,6 +2,12 @@
 import Link from 'next/link'
 import styles from './project.module.scss'
 import { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
+
+const transitionBack = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionTitle = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionDescription = { delay: 0.5, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionCredits = { delay: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const ProjectPage = ({params}) => {
 
@@ -31,19 +37,42 @@ const ProjectPage = ({params}) => {
         <section className={styles.project}>
             {project && (
                 <>
-                    <Link className={styles.project_arrow} href="/work/">
-                        {/* <img src="/svg/arrow.svg" /> */}
-                        Go back
-                    </Link>
-                    <h1 className={styles.project_title}>{project.title.rendered}</h1>
+                    <motion.div
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={transitionBack}
+                    >
+                        <Link className={styles.project_arrow} href="/work/">
+                            {/* <img src="/svg/arrow.svg" /> */}
+                            Go back
+                        </Link>
+                    </motion.div>
+                    <motion.h1
+                        className={styles.project_title}
+                        initial={{opacity: 0, x: -20}}
+                        animate={{opacity: 1, x: 0}}
+                        transition={transitionTitle}
+                    >
+                        {project.title.rendered}
+                    </motion.h1>
                     
                     <div className={styles.project_info}>
-                        <div className={styles.project_info_description}>
+                        <motion.div
+                            className={styles.project_info_description}
+                            initial={{opacity: 0, x: -20}}
+                            animate={{opacity: 1, x: 0}}
+                            transition={transitionDescription}
+                        >
                             <p>{project.acf.description}</p>
                             <div className={styles.project_images} dangerouslySetInnerHTML={{__html: project.content.rendered}}/>
-                        </div>
+                        </motion.div>
                         
-                        <div className={styles.project_info_right}>
+                        <motion.div
+                            className={styles.project_info_right}
+                            initial={{opacity: 0, x: 20}}
+                            animate={{opacity: 1, x: 0}}
+                            transition={transitionCredits}
+                        >
                             <div className={styles.project_info_credits} dangerouslySetInnerHTML={{__html: project.acf.credits}}/>
                             {project.acf.project_link && (
                                 <Link target="_blank" href={project.acf.project_link}>
@@ -52,7 +81,7 @@ const ProjectPage = ({params}) => {
                                     </button>
                                 </Link>
                             )}
-                        </div>
+                        </motion.div>
                     </div>
                 </>
             )}
