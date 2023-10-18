@@ -403,6 +403,7 @@ const VideoMaterial = ({url}) => {
     
     // console.log(video)
     const texture = new THREE.VideoTexture( video );
+    texture.needsUpdate = true
 
 
 
