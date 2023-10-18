@@ -46,9 +46,11 @@ const ProjectPage = ({params}) => {
                         <div className={styles.project_info_right}>
                             <div className={styles.project_info_credits} dangerouslySetInnerHTML={{__html: project.acf.credits}}/>
                             {project.acf.project_link && (
-                                <button className={styles.project_link}>
-                                    <Link target="_blank" href={project.acf.project_link}>Project Link</Link>
-                                </button>
+                                <Link target="_blank" href={project.acf.project_link}>
+                                    <button className={styles.project_link}>
+                                        Project Link
+                                    </button>
+                                </Link>
                             )}
                         </div>
                     </div>
