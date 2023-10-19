@@ -346,9 +346,11 @@ const Project = ({categories, project, index, tunnel}) => {
 
             { video && (
                 <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
+                    {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
                         <VideoMaterial url={video} />
-                    </Suspense>
+                    </Suspense> */}
+                    {/* <FallbackMaterial url={videoPreview}/> */}
+                    <VideoMaterial url={video} />
                 </Plane>
             )}
         </group>
@@ -360,6 +362,7 @@ const FallbackMaterial = ({url}) => {
     
     const [texture, setTexture] = useState();
     const textureLoaderFallback = new TextureLoader()
+    textureLoaderFallback.crossOrigin = ''
     textureLoaderFallback.load(url, (_texture) => {
         setTexture(_texture)
     });
@@ -377,11 +380,14 @@ const FallbackMaterial = ({url}) => {
 
 // Video material
 const VideoMaterial = ({url}) => {
-    // const [texture, setTexture] = useState();
-    // const textureLoaderVideo = new TextureLoader()
-    // textureLoaderVideo.load(url, (_texture) => {
-    //     setTexture(_texture)
-    // });
+    /* const [texture, setTexture] = useState();
+    const textureLoaderVideo = new TextureLoader()
+    textureLoaderVideo.crossOrigin = ''
+    textureLoaderVideo.load(url, (_texture) => {
+         setTexture(_texture)
+    });
+    const texture = useVideoTexture(url)
+    */
 
     const video = document.createElement('video')
     video.src = url
@@ -396,9 +402,7 @@ const VideoMaterial = ({url}) => {
 
     video.appendChild(source) */
     
-    // console.log(video)
     const texture = new THREE.VideoTexture( video );
-    // const texture = useVideoTexture(url)
 
     return (
         <>
