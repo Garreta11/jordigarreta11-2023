@@ -397,7 +397,7 @@ const VideoMaterial = ({url}) => {
     video.appendChild(source) */
     
     // console.log(video)
-    const texture = /*  */new THREE.VideoTexture( video );
+    const texture = new THREE.VideoTexture( video );
     // const texture = useVideoTexture(url)
 
     return (
