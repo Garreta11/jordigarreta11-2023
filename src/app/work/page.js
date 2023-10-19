@@ -86,12 +86,6 @@ const WorkPage = () => {
                 startLoading(sources)
             })
         }
-        
-
-
-
-        
-
     }, [])
 
     const setLoaders = () => {
@@ -396,17 +390,14 @@ const VideoMaterial = ({url}) => {
     video.muted = true
     video.crossOrigin = "anonymous"
     
-    const source = document.createElement('source')
+    /* const source = document.createElement('source')
     source.src = url
+    source.type = "video/mp4"
 
-    video.appendChild(source)
+    video.appendChild(source) */
     
     // console.log(video)
-    const texture = new THREE.VideoTexture( video );
-    texture.needsUpdate = true
-
-
-
+    const texture = /*  */new THREE.VideoTexture( video );
     // const texture = useVideoTexture(url)
 
     return (
