@@ -346,11 +346,9 @@ const Project = ({categories, project, index, tunnel}) => {
 
             { video && (
                 <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
+                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
                         <VideoMaterial url={video} />
-                    </Suspense> */}
-                    {/* <FallbackMaterial url={videoPreview}/> */}
-                    <VideoMaterial url={video} />
+                    </Suspense>
                 </Plane>
             )}
         </group>
@@ -359,15 +357,13 @@ const Project = ({categories, project, index, tunnel}) => {
 
 // Fallback material
 const FallbackMaterial = ({url}) => {
-    
-    const [texture, setTexture] = useState();
-    const textureLoaderFallback = new TextureLoader()
-    textureLoaderFallback.crossOrigin = ''
-    textureLoaderFallback.load(url, (_texture) => {
-        setTexture(_texture)
-    });
 
-    // const texture = useTexture(url)
+    const [texture, setTexture] = useState()
+    const _texture = useTexture(url)
+
+    useEffect(() => {
+        setTexture(_texture)
+    }, [])
 
     return (
         <>
@@ -380,29 +376,12 @@ const FallbackMaterial = ({url}) => {
 
 // Video material
 const VideoMaterial = ({url}) => {
-    /* const [texture, setTexture] = useState();
-    const textureLoaderVideo = new TextureLoader()
-    textureLoaderVideo.crossOrigin = ''
-    textureLoaderVideo.load(url, (_texture) => {
-         setTexture(_texture)
-    });
-    const texture = useVideoTexture(url)
-    */
 
-    const video = document.createElement('video')
-    video.src = url
-    video.loop = true
-    video.autoplay = true
-    video.muted = true
-    video.crossOrigin = "anonymous"
-    
-    /* const source = document.createElement('source')
-    source.src = url
-    source.type = "video/mp4"
-
-    video.appendChild(source) */
-    
-    const texture = new THREE.VideoTexture( video );
+    const [texture, setTexture] = useState()
+    const _texture = useVideoTexture(url)
+    useEffect(() => {
+        setTexture(_texture)
+    }, [])
 
     return (
         <>
