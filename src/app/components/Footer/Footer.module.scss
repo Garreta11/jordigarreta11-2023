@@ -18,13 +18,29 @@
 
     transition: background-color ease 1s, color ease 1s;
 
-    .footerLinks {
+    &_right {
         display: flex;
         gap: 20px;
 
+        @include sm {
+            flex-direction: column-reverse;
+            gap: 0;
+            align-items: flex-end;
+        }
     }
 
-    .footerMail {
+    &_links {
+        display: flex;
+        gap: 20px;
+
+        @include sm {
+            flex-direction: column;
+            gap: 0;
+        }
+
+    }
+
+    &_mail {
         display: flex;
     }
 
@@ -35,8 +51,7 @@
     }
 
     @include sm {
-        flex-direction: column;
-        height: 110px;
+        height: 70px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
