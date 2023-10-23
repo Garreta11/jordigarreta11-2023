@@ -318,6 +318,8 @@ const Project = ({categories, project, index, tunnel}) => {
     const [videoPreview, setVideoPreview] = useState("");
     const [category, setCategory] = useState("");
 
+    const [isMobile, setIsMobile] = useState(false)
+
     useEffect(() => {
         // title
         setTitle(project.title.rendered)
@@ -339,6 +341,23 @@ const Project = ({categories, project, index, tunnel}) => {
         }
     }, [project, categories])
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 921) {
+                setIsMobile(true)
+            } else {
+                setIsMobile(false)
+            }
+        }
+
+        handleResize()
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return(
         <group
             position={[0, 0, -index * DISTANCE]}
@@ -347,7 +366,12 @@ const Project = ({categories, project, index, tunnel}) => {
             { video && (
                 <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
                     <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
-                        <VideoMaterial url={video} />
+                        { isMobile ? (
+                            <FallbackMaterial url={videoPreview}/>
+                        ) : (
+                            <VideoMaterial url={video} />
+                        )}
+                        
                     </Suspense>
                 </Plane>
             )}
