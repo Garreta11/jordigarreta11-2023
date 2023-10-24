@@ -54,7 +54,7 @@ const LabPage = () => {
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={isMobile ? 2 : 8}
+                    slidesPerView={isMobile ? 2 : "auto"}
                     spaceBetween={30}
                     loop={true}
                     freeMode={true}
