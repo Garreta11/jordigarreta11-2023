@@ -35,8 +35,9 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     animation: $animationfadein;
 
     @include sm {
-      height: calc(100% - 170px);
+      // height: calc(100% - 170px);
       top: 100px;
+      padding-top: 0px;
       flex-direction: column;
     }
 
@@ -76,10 +77,10 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     }
 
     &_container {
-      position: fixed;
+      position: absolute;
       width: 100%;
-      height: calc(100vh - 170px);
-      top: 100px;
+      // height: calc(100vh - 170px);
+      top: 0px;
 
       text-align: center;
       z-index: 1;
@@ -108,14 +109,14 @@ $animationfadein: fadein ease 0.5s forwards 2s;
         overflow-y: scroll;
         width: 100%;
         height: 100%;
-        padding-top: 50px;
-        padding-bottom: 50px;
+        padding-top: 100px;
+        padding-bottom: 70px;
         padding-left: 20px;
         padding-right: 20px;
 
         @include sm {
           font-size: 2em;
-          padding-top: 70px;
+          padding-top: 150px;
           padding-bottom: 70px;
         }
       }
