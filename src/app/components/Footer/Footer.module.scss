@@ -8,12 +8,12 @@
     height: 70px;
     padding-left: 20px;
     padding-right: 20px;
-    background-color: var(--color-two);
+    background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 10;
-    border-top: 1px solid var(--color-one);
+    /* border-top: 1px solid var(--color-one); */
     font-size: 1em;
 
     transition: background-color ease 1s, color ease 1s;

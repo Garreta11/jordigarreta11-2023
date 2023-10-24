@@ -14,7 +14,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
   }
 
   &_list {
-    position: absolute;
+    position: fixed;
     z-index: 1;
     top: 0;
     left: 0;

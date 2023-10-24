@@ -11,10 +11,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--color-two);
+    background-color: transparent;
     z-index: 10;
 
-    border-bottom: 1px solid var(--color-one);
+    /* border-bottom: 1px solid var(--color-one); */
 
     transition: background-color ease 1s, color ease 1s;
 
@@ -67,7 +67,18 @@
 
             p {
                 cursor: pointer;
-                color: var(--color-one);
+                color: var(--color-two);
+                -webkit-text-stroke: 1px var(--color-one);
+                font-size: 4em;
+                transition: color ease 0.3s;
+
+                &:hover {
+                    color: var(--color-one);
+                }
+
+                @include sm {
+                    font-size: 2em;
+                }
             }
         }
     }
