@@ -86,10 +86,14 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
     const infoRef = useRef()
     const [showInfo, setShowInfo] = useState(false)
 
+    const fileType = experiment.acf.file.type 
+
     const handlePointerEnter = (event, _tech) => {
         const targetElement = event.currentTarget
         const video = targetElement.querySelector('video')
-        video.play()
+        if (video !== null) {
+            video.play()
+        }
 
         setShowInfo(true)
 
@@ -99,7 +103,10 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
     const handlePointerLeave = (event) => {
         const targetElement = event.currentTarget
         const video = targetElement.querySelector('video')
-        video.pause()
+
+        if (video !== null) {
+            video.pause()
+        }
 
         setShowInfo(false)
 
@@ -113,15 +120,20 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
                 onMouseOver={(e) => handlePointerEnter(e, experiment.acf.info.technology)}
                 onMouseLeave={(e) => handlePointerLeave(e)}
             >
-                <video
-                    className={styles.experiment_videoElement}
-                    src={experiment.acf.file.url}
-                    loop
-                    muted
-                    autoPlay={isMobile ? true : false}
-                >
-                    <source src={experiment.acf.file.url} type="video/mp4" />
-                </video>
+                {fileType === 'video' ? (
+                    <video
+                        className={styles.experiment_videoElement}
+                        src={experiment.acf.file.url}
+                        loop
+                        muted
+                        autoPlay={isMobile ? true : false}
+                    >
+                        <source src={experiment.acf.file.url} type="video/mp4" />
+                    </video>
+                ) : (
+                    <img className={styles.experiment_videoElement} src={experiment.acf.file.url} />
+                )}
+                
                 <div
                     ref={infoRef}
                     className={showInfo ? `${styles.experiment_infoElement} ${styles.experiment_infoElement_show}` : styles.experiment_infoElement}

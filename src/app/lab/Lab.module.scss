@@ -37,7 +37,7 @@
 
 .experiment {
   &:hover {
-    video {
+    video, img {
       opacity: 1;
       filter: grayscale(0);
       z-index: 10;
