@@ -253,7 +253,7 @@ const Scene = ({sendIndex, categories, projects, tunnel}) => {
                 shadow-mapSize-width={1024}
             />
 
-            <fog attach="fog" color="white" near={1} far={DISTANCE + 10} />
+            {/* <fog attach="fog" color="white" near={1} far={DISTANCE + 10} /> */}
             
             <Suspense fallback={null}>
                 <ScrollControls damping={0.1} pages={projects.length} distance={1} infinite>
@@ -308,6 +308,7 @@ const Project = ({categories, project, index, tunnel}) => {
     const [title, setTitle] = useState("");
     const [video, setVideo] = useState("");
     const [videoAspectRatio, setVideoAspectRatio] = useState("");
+    const [preview, setPreview] = useState("");
     const [videoPreview, setVideoPreview] = useState("");
     const [category, setCategory] = useState("");
 
@@ -322,6 +323,8 @@ const Project = ({categories, project, index, tunnel}) => {
         setVideoAspectRatio(project.acf.video.imatge_preview.width / project.acf.video.imatge_preview.height)
         // video preview
         setVideoPreview(project.acf.video.imatge_preview.url)
+        // preview
+        setPreview(project.acf.video.preview.url)
 
         if (categories && project) {
             for (let i = 0; i < project.categories.length; i++) {
@@ -357,16 +360,22 @@ const Project = ({categories, project, index, tunnel}) => {
         >
 
             { video && (
-                <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
-                        { isMobile ? (
-                            <FallbackMaterial url={videoPreview}/>
-                        ) : (
-                            <VideoMaterial url={video} />
-                        )}
-                        
-                    </Suspense>
-                </Plane>
+                <>
+                    <Plane receiveShadow args={[3, 3]} position={[0, 0, 0]}>
+                        {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
+                            { isMobile ? (
+                                <FallbackMaterial url={videoPreview}/>
+                            ) : (
+                                <VideoMaterial url={video} />
+                            )}
+                            
+                        </Suspense> */}
+                        <PreviewMaterial url={preview} />
+                    </Plane>
+{/*                     <Plane receiveShadow args={[3, 3]} position={[0, 0, -5]}>
+                        <PreviewMaterial url={preview} />
+                    </Plane> */}
+                </>
             )}
         </group>
     )
@@ -401,6 +410,21 @@ const VideoMaterial = ({url}) => {
     }, [])
 
     return (
+        <>
+            {texture && (
+                <meshBasicMaterial map={texture} toneMapped={false} />
+            )}
+        </>
+    )
+}
+
+const PreviewMaterial = ({url}) => {
+    const [texture, setTexture] = useState()
+    const _texture = useTexture(url)
+    useEffect(() => {
+        setTexture(_texture)
+    }, [])
+    return(
         <>
             {texture && (
                 <meshBasicMaterial map={texture} toneMapped={false} />
