@@ -55,7 +55,7 @@ const LabPage = () => {
                 <Swiper
                     ref={swiperRef}
                     slidesPerView={isMobile ? 2 : "auto"}
-                    spaceBetween={30}
+                    spaceBetween={0}
                     loop={true}
                     freeMode={true}
                     mousewheel={true}
@@ -133,13 +133,6 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
                 ) : (
                     <img className={styles.experiment_videoElement} src={experiment.acf.file.url} />
                 )}
-                
-                <div
-                    ref={infoRef}
-                    className={showInfo ? `${styles.experiment_infoElement} ${styles.experiment_infoElement_show}` : styles.experiment_infoElement}
-                >
-                    <p>{experiment.acf.info.technology}</p>
-                </div>
             </div>
         </>
     )

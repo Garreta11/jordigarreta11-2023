@@ -1,7 +1,11 @@
 'use client'
 import styles from './About.module.scss'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useInsertionEffect } from 'react'
 import { motion } from 'framer-motion'
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Mousewheel, Autoplay, FreeMode} from 'swiper/modules';
+import 'swiper/css';
 
 const transition = { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 const transitionCV = { delay: 2, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
@@ -56,61 +60,61 @@ const AboutPage = () => {
                             animate={{opacity: 1, x: 0}}
                             transition={transitionMake}
                         >
-                            <p>MAKE.</p>
-                            <p>MAKE.</p>
-                            <p>MAKE.</p>
+                            <p>MAKE.MAKE.MAKE.</p>
                         </motion.div>
-                        <motion.div
-                            className={styles.about_about_friends}
-                            initial={{opacity: 0, x: 20}}
-                            animate={{opacity: 1, x: 0}}
-                            transition={transitionFriends}
-                        >
-                            <h2 className={styles.about_about_friends_title}>FRIENDS</h2>
-                            <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
-                        </motion.div>
+
                     </div>
                 </div>
             )}
             {cvPage && (
-                <motion.div
-                    id='curriculum'
-                    className={styles.about_cv}
-                    initial={{opacity: 0, x: -20}}
-                    animate={{opacity: 1, x: 0}}
-                    transition={transitionCV}
-                >
-                    <h1 className={styles.about_cv_title}>Curriculum</h1>
-                    <div className={styles.about_cv_top}>
-                        <div className={styles.about_cv_workexperience}>
-                            <h2>work experience</h2>
-                            <div dangerouslySetInnerHTML={{__html: cvPage.acf.work_experience}} />
-                        </div>
-
-                        <div className={styles.about_cv_education}>
-                            <h2>education</h2>
-                            <div dangerouslySetInnerHTML={{__html: cvPage.acf.education}} />
-                        </div>
-
-                        <div className={styles.about_cv_skills}>
-                            <h2>skills</h2>
-                            <div dangerouslySetInnerHTML={{__html: cvPage.acf.skills}} />
-                        </div>
-
-                        <div className={styles.about_cv_languages}>
-                            <h2>languages</h2>
-                            <div dangerouslySetInnerHTML={{__html: cvPage.acf.languages}} />
-                        </div>
-                    </div>
-                    <div className={styles.about_cv_bottom}>
-                        <div className={styles.about_cv_contact}>
-                            <h2>contact</h2>
-                            <div dangerouslySetInnerHTML={{__html: cvPage.acf.contact}} />
-                        </div>
-                    </div>
-                </motion.div>
+                <Marquee cvPage={cvPage} />
             )}
         </main>
+    )
+}
+
+
+
+const Marquee = ({cvPage}) => {
+
+    const [skills, setSkills] = useState([])
+
+    useEffect(() => {
+        let s = cvPage.acf.skills.replaceAll('<p>', '')
+        s = s.replaceAll('</p>', '')
+        
+        setSkills(s.split('\n'))
+    }, [])
+
+
+    return(
+        <>
+            <Swiper
+                slidesPerView='auto'
+                autoplay={{
+                    delay: 1,
+                    disableOnInteraction: false,
+                }}
+                loop={true}
+                speed={5000}
+                freeModeMomentum={false}
+                freeMode={true}
+                mousewheel={true}
+                modules={[Autoplay, Mousewheel, FreeMode]}
+                className={styles.about__marquee}
+            >
+                {
+                    skills.map((skill, index) => (
+                        <SwiperSlide
+                            className={styles.about__marquee__slide}
+                            key={index}
+                        >
+                            <p >{skill} / </p>
+                        </SwiperSlide>
+                    ))
+                }
+            </Swiper>
+        </>
     )
 }
 

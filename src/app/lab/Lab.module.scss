@@ -2,23 +2,19 @@
 
 .labpage {
   width: 100vw;
-  height: calc(100vh - 170px);
-  display: flex;
-  align-items: center;
+  height: 100vh;
   position: relative;
-  top: 100px;
-
-  @include sm {
-    height: calc(100vh - 170px);
-  }
 
   &_tech {
     position: absolute;
-    bottom: 20px;
+    top: 50%;
     left: 50%;
-    font-size: 2em;
+    font-size: var(--font-size-big);
     z-index: 10000;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+
+    text-transform: uppercase;
+    text-align: center;
 
     @include sm {
       display: none;
@@ -31,83 +27,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 170px);
     position: relative;
+    height: 100%;
+    width: auto;
 }
 
 .experiment {
-  &:hover {
-    video, img {
-      opacity: 1;
-      filter: grayscale(0);
-      z-index: 10;
-      @include sm {
-        width: 100%;
-      }
-    }
-
-    .experiment_infoElement {
-      width: 150%;
-
-      @include sm {
-        width: 100%;
-      }
-    }
-  }
 
   &_videoElement {
     position: relative;
-    opacity: 0.5;
-    /* S */
-    transform: scale(1);
     transition: all ease 0.5s;
     z-index: 0;
     box-shadow: 0px;
-    max-height: 70%;
-
-    width: 100%;
-    height: auto;
-
-    max-height: calc(100vh - 170px);
     object-fit: cover;
 
+    height: 100vh;
+    width: auto;
+
     @include sm {
       opacity: 1;
     }
 
-  }
-  
-  &_infoElement {
-    opacity: 0;
-    text-align: center;
-
-    display: none;
-    
-    &_show {
-      animation: show-info 1s forwards 0.2s;
-      @include sm {
-        animation: none;
-      }
-    }
-
-    @include sm {
-      display: block;
-      opacity: 1;
-    }
-  }
-}
-
-
-@keyframes show-info {
-  0% {
-    opacity: 0;
-    transform: translate(0, 20px);
-    // width: 100%;
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0px);
-    // width: 150%;
   }
 }
 

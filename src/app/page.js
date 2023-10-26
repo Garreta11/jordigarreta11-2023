@@ -9,43 +9,32 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 import Particles from './components/Particles/Particles'
 
-const transitionWork = { delay: 1.5, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
-const transitionLab = { delay: 1.5, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
+import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo'
 
 export default function Home() {
 
   const [zoomParticles, setZoomParticles] = useState(false)
+  const [videoLoad, setVideoLoad] = useState(false);
 
   const handleClick = () => {
     setZoomParticles(true)
+  }
+
+  const videoLoaded = () => {
+    console.log("video is loaded")
+    setVideoLoad(true)
   }
 
   return (
     <motion.main
       className={styles.main}
     >
+
+      <BackgroundVideo videoLoaded={videoLoaded} />
     
-      <Particles zoom={zoomParticles} />
-
-      <div className={styles['home--wrapper']}>
-          <motion.div
-            className={styles['home--wrapper--item']}
-            initial={{opacity: 0, x: -20}}
-            animate={{opacity: 1, x: 0}}
-            transition={transitionWork}
-          >
-            <Link onClick={handleClick} href="/work">Work</Link>
-          </motion.div>
-          <motion.div
-            className={styles['home--wrapper--item']}
-            initial={{opacity: 0, x: 20}}
-            animate={{opacity: 1, x: 0}}
-            transition={transitionLab}
-          >
-            <Link onClick={handleClick} href="/lab">Lab</Link>
-          </motion.div>
-
-      </div>
+      {videoLoad && (
+        <Particles zoom={zoomParticles} />
+      )}
         
       </motion.main>
   )

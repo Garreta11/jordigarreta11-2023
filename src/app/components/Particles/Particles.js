@@ -153,7 +153,8 @@ const ParticleMaterial = shaderMaterial(
     // fragment shader
     /*glsl*/`
         void main() {
-            vec4 color = vec4(0.18, 0.18, 0.18, 1.0);
+            // vec4 color = vec4(0.18, 0.18, 0.18, 1.0);
+            vec4 color = vec4(1.0);
 
             gl_FragColor = color;
         }
@@ -198,7 +199,7 @@ const Mesh = ({zoom}) => {
         gsap.to(matRef.current.uniforms.uSize, {
             value: 0.596,
             duration: 3.,
-
+            delay: 1
         })
     }, [])
 
@@ -232,21 +233,6 @@ const Mesh = ({zoom}) => {
             value: newFreq
         })
     })
-
-    // const particles = useControls({
-    //     speedRotation: { value: 1., min: 0.0, max: 1.0, step: 0.001 }
-    // })
-
-    // const options = useMemo(() => {
-    //     return {
-    //       uSize: { value: 0.596, min: 0.05, max: 2.0, step: 0.0001 },
-    //       uSpeed: { value: 0.1, min: 0.0001, max: 0.5, step: 0.0001},
-    //       uFrequency: { value: 0.7, min: 0.7, max: 7.0, step: 0.001 },
-    //       uAmplitude: { value: 0.3, min: 0.3, max: 1.0, step: 0.001 },
-    //       uMaxDistance: { value: 1., min: 0.1, max: 1.0, step: 0.001 },
-    //     }
-    // }, [])
-    // const curlNoise = useControls('Curl Noise', options)
     
 
     return (
