@@ -169,7 +169,6 @@ const WorkPage = () => {
                         className={`${isListOpen ? `${styles.main_list_container} ${styles.main_list_container_open}` : `${styles.main_list_container} ${styles.main_list_container_close}`}`}
                     >
                         <div className={styles.main_list_container_group}>
-                            <h6 className={styles.main_list_container_all}>All projects</h6>
                             {projects.map((project, index) => {
                                 const parser = new DOMParser();
                                 const parsedEntity = parser.parseFromString(project.title.rendered, "text/html");
