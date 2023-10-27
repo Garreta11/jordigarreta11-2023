@@ -129,6 +129,7 @@ const Experiment = ({ experiment, isMobile }) => {
                         loop
                         muted
                         autoPlay={isMobile ? true : false}
+                        playsInline={true}
                     >
                         <source src={experiment.acf.file.url} type="video/mp4" />
                     </video>
