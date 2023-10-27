@@ -50,9 +50,9 @@
             display: flex;
             justify-content: space-between;
             font-size: var(--font-size-big);
-            pointer-events: all;
-
+            
             a {
+                pointer-events: all;
                 &:hover {
                     mix-blend-mode: difference;
                 }
@@ -63,7 +63,10 @@
             font-size: var(--font-size-medium);
             display: flex;
             justify-content: space-between;
-            pointer-events: all;
+            
+            a {
+                pointer-events: all;
+            }
 
             @include sm {
                 font-size: var(--font-size-smaller);

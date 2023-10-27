@@ -3,6 +3,7 @@ import Link from 'next/link'
 import styles from './project.module.scss'
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
+import next from 'next';
 
 const transitionBack = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 const transitionTitle = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
@@ -10,8 +11,8 @@ const transitionDescription = { delay: 0.5, duration: 1, ease: [0.43, 0.13, 0.23
 const transitionCredits = { delay: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const ProjectPage = ({params}) => {
-
     const [project, setProject] = useState()
+    const [nextProject, setNextProject] = useState()
 
     useEffect(() => {
         async function fetchData() {
@@ -24,6 +25,11 @@ const ProjectPage = ({params}) => {
                     if (d.slug === params.slug) {
                         setProject(d)
                         console.log(d)
+                        if (d.next !== null) {
+                            setNextProject(d.next.slug)
+                        } else {
+                            setNextProject('oggetti-fanno-musica')
+                        }
                     }
                 })
             })
@@ -69,6 +75,12 @@ const ProjectPage = ({params}) => {
                                 </Link>
                             )}
                         </motion.div>
+                    </div>
+
+                    <div className={styles.project_next}>
+                        <Link className={styles.project_next_link} href={`/work/${nextProject}`}>
+                            Next Project
+                        </Link>
                     </div>
                 </>
             )}

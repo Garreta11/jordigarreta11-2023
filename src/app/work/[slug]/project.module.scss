@@ -5,10 +5,12 @@
     position: relative;
     top: 100px;
     padding-top: 50px;
-    padding-bottom: 50px;
+    padding-bottom: 150px;
     padding-left: var(--padding-page);
     padding-right: var(--padding-page);
     overflow-y: scroll;
+
+    cursor: url('/svg/project.svg'), auto;
 
     @include sm {
         // padding: 150px 20px;
@@ -53,6 +55,7 @@
         margin-bottom: 50px;
         text-transform: uppercase;
         width: 70%;
+        font-weight: 300;
         @include sm {
             margin-bottom: 20px;
         }
@@ -124,6 +127,17 @@
         font-size: var(--font-size-medium);
         &:hover {
             font-weight: 800;
+        }
+    }
+
+    &_next {
+        text-align: right;
+        width: 100%;
+        &_link {
+            font-size: var(--font-size-big);
+            text-transform: uppercase;
+            width: fit-content;
+            
         }
     }
 
