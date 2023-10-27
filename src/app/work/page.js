@@ -161,7 +161,7 @@ const WorkPage = () => {
     }
 
     return(
-        <main className={styles.main}>
+        <main className={`${isListOpen ? `${styles.main} ${styles.main_open}` : `${styles.main} ${styles.main_close}`}`}>
 
             {projects && (
                 <>
@@ -185,18 +185,17 @@ const WorkPage = () => {
                     </div>
 
                     <div className={styles.main_list}>
-                        <svg className={styles.main_list_icon} onClick={handleClickList} width="964" height="964" viewBox="0 0 964 964" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            {/* <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="20"/> */}
+                        <svg className={styles.main_list_icon} onClick={handleClickList} width="420" height="250" viewBox="0 0 420 250" fill="none" xmlns="http://www.w3.org/2000/svg">
                             {isListOpen ? (
                                 <>
-                                    <path d="M374.541 365.423L598.566 589.449" stroke="#FFFFFF" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M365.423 589.449L589.449 365.423" stroke="#FFFFFF" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M28 227.5L373.544 28" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M38.5 28L384.044 227.5" stroke="white" strokeWidth="40" strokeLinecap="square"/>
                                 </>
                             ) : (
                                 <>
-                                    <path d="M20 225H536" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M20 20H536" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M20 122H536" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M20 225H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M20 20H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M20 122H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
                                 </>
                             )}
                         </svg>
@@ -284,7 +283,7 @@ const Projects =({ getIndex, categories, projects, tunnel }) => {
         setIndex(i)
         
         // camera rotation
-        const speed = 0.1;
+        const speed = (window.innerWidth < 921) ? 0.1 : 0.9;
         gsap.to(camera.rotation, {
             x: mouse.y * speed,
             y: -mouse.x * speed,
@@ -362,59 +361,14 @@ const Project = ({categories, project, index, tunnel}) => {
             { video && (
                 <>
                     <Plane receiveShadow args={[3, 3]} position={[0, 0, 0]}>
-                        {/* <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
-                            { isMobile ? (
-                                <FallbackMaterial url={videoPreview}/>
-                            ) : (
-                                <VideoMaterial url={video} />
-                            )}
-                            
-                        </Suspense> */}
                         <PreviewMaterial url={preview} />
                     </Plane>
-{/*                     <Plane receiveShadow args={[3, 3]} position={[0, 0, -5]}>
+                    {/* <Plane receiveShadow args={[3, 3]} position={[0, 0, -0.5]}>
                         <PreviewMaterial url={preview} />
                     </Plane> */}
                 </>
             )}
         </group>
-    )
-}
-
-// Fallback material
-const FallbackMaterial = ({url}) => {
-
-    const [texture, setTexture] = useState()
-    const _texture = useTexture(url)
-
-    useEffect(() => {
-        setTexture(_texture)
-    }, [])
-
-    return (
-        <>
-            {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
-            )}
-        </>
-    )
-}
-
-// Video material
-const VideoMaterial = ({url}) => {
-
-    const [texture, setTexture] = useState()
-    const _texture = useVideoTexture(url)
-    useEffect(() => {
-        setTexture(_texture)
-    }, [])
-
-    return (
-        <>
-            {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
-            )}
-        </>
     )
 }
 
@@ -427,7 +381,7 @@ const PreviewMaterial = ({url}) => {
     return(
         <>
             {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
+                <meshBasicMaterial map={texture} transparent toneMapped={false} opacity={1.0}/>
             )}
         </>
     )

@@ -1,3 +1,5 @@
+@use '../../_styles/breakpoints.scss' as *;
+
 .nav {
     width: 100vw;
     height: 100vh;
@@ -25,11 +27,18 @@
         &__title, &__about {
             font-size: var(--font-size-big);
             pointer-events: all;
+            @include sm {
+                line-height: 1em;
+            }
         }
 
-        &_job {
+        &__job {
             font-size: var(--font-size-small);
             pointer-events: all;
+
+            @include sm {
+                font-size: var(--font-size-smaller);
+            }
         }
     }
 
@@ -52,6 +61,10 @@
             display: flex;
             justify-content: space-between;
             pointer-events: all;
+
+            @include sm {
+                font-size: var(--font-size-smaller);
+            }
         }
     }
 }

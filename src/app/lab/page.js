@@ -54,13 +54,18 @@ const LabPage = () => {
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={isMobile ? 2 : "auto"}
+                    slidesPerView={isMobile ? "auto" : "auto"}
                     spaceBetween={0}
                     loop={true}
                     freeMode={true}
                     mousewheel={true}
                     modules={[Autoplay, Mousewheel, FreeMode]}
                     className={styles.myswiper}
+                    onSlideChange={(_swiper) => {
+                        const currentSlide = _swiper.slides[_swiper.activeIndex];
+                        const t = currentSlide.children[0].dataset.tech;
+                        setTech(t)
+                    }}
                 >
                     {experiments.map((experiment, index) => {
                         return(
@@ -68,7 +73,7 @@ const LabPage = () => {
                                 className={styles.swiperslide}
                                 key={index}
                             >
-                                <Experiment experiment={experiment} isMobile={isMobile} handleTech={handleTech}/>
+                                <Experiment experiment={experiment} isMobile={isMobile}/>
                             </SwiperSlide>
                         )
                     })}
@@ -81,14 +86,14 @@ const LabPage = () => {
     )
 }
 
-const Experiment = ({ experiment, isMobile, handleTech }) => {
+const Experiment = ({ experiment, isMobile }) => {
 
     const infoRef = useRef()
     const [showInfo, setShowInfo] = useState(false)
 
     const fileType = experiment.acf.file.type 
 
-    const handlePointerEnter = (event, _tech) => {
+    const handlePointerEnter = (event) => {
         const targetElement = event.currentTarget
         const video = targetElement.querySelector('video')
         if (video !== null) {
@@ -96,8 +101,6 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
         }
 
         setShowInfo(true)
-
-        handleTech(_tech)
     }
 
     const handlePointerLeave = (event) => {
@@ -109,16 +112,15 @@ const Experiment = ({ experiment, isMobile, handleTech }) => {
         }
 
         setShowInfo(false)
-
-        handleTech("")
     }
 
     return(
         <>
             <div
                 className={styles.experiment}
-                onMouseOver={(e) => handlePointerEnter(e, experiment.acf.info.technology)}
+                onMouseOver={(e) => handlePointerEnter(e)}
                 onMouseLeave={(e) => handlePointerLeave(e)}
+                data-tech={experiment.acf.info.technology}
             >
                 {fileType === 'video' ? (
                     <video

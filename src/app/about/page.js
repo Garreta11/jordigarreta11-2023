@@ -53,21 +53,13 @@ const AboutPage = () => {
                     >
                         {aboutPage.acf.description}
                     </motion.p>
-                    <div className={styles.about_about_info}>
-                        <motion.div
-                            className={styles.about_about_make}
-                            initial={{opacity: 0, x: -20}}
-                            animate={{opacity: 1, x: 0}}
-                            transition={transitionMake}
-                        >
-                            <p>MAKE.MAKE.MAKE.</p>
-                        </motion.div>
-
-                    </div>
                 </div>
             )}
             {cvPage && (
                 <Marquee cvPage={cvPage} />
+            )}
+            {aboutPage && (
+                <Friends aboutPage={aboutPage} />
             )}
         </main>
     )
@@ -78,28 +70,35 @@ const AboutPage = () => {
 const Marquee = ({cvPage}) => {
 
     const [skills, setSkills] = useState([])
+    const swiperRef = useRef();
 
     useEffect(() => {
         let s = cvPage.acf.skills.replaceAll('<p>', '')
         s = s.replaceAll('</p>', '')
         
         setSkills(s.split('\n'))
+
+        if (swiperRef) {
+            swiperRef.current.children[0].style.transitionTimingFunction = 'linear'
+        }
+
     }, [])
 
 
     return(
         <>
             <Swiper
+                ref={swiperRef}
                 slidesPerView='auto'
                 autoplay={{
                     delay: 1,
                     disableOnInteraction: false,
                 }}
                 loop={true}
-                speed={5000}
+                speed={10000}
                 freeModeMomentum={false}
                 freeMode={true}
-                mousewheel={true}
+                mousewheel={false}
                 modules={[Autoplay, Mousewheel, FreeMode]}
                 className={styles.about__marquee}
             >
@@ -115,6 +114,27 @@ const Marquee = ({cvPage}) => {
                 }
             </Swiper>
         </>
+    )
+}
+
+const Friends = ({aboutPage}) => {
+    const [friends, setFriends] = useState([])
+
+    useEffect(() => {
+        let s = aboutPage.acf.friends.replaceAll('<p>', '')
+        s = s.replaceAll('</p>', '')
+        
+        // setFriends(s.split('\n'))
+        console.log(aboutPage.acf.friends)
+
+    }, [])
+    return(
+        <div className={styles.about__friends}>
+            <h3>FRIENDS</h3>
+            {friends && (
+                <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
+            )}
+        </div>
     )
 }
 
