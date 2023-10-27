@@ -2,7 +2,8 @@
 
 .nav {
     width: 100vw;
-    height: 100vh;
+    /* height: 100vh; */
+    min-height: -webkit-fill-available;
     position: fixed;
     z-index: 2;
     top: 0;
