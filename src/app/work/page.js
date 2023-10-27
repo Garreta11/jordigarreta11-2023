@@ -185,17 +185,17 @@ const WorkPage = () => {
                     </div>
 
                     <div className={styles.main_list}>
-                        <svg className={styles.main_list_icon} onClick={handleClickList} width="420" height="250" viewBox="0 0 420 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className={styles.main_list_icon} onClick={handleClickList} width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
                             {isListOpen ? (
                                 <>
-                                    <path d="M28.5295 310.486L310.665 28.3508" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M43.3787 28.3508L325.514 310.486" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M144.968 267.52L267.597 144.89" stroke="white" strokeWidth="17.3859" strokeLinecap="square"/>
+                                    <path d="M151.422 144.89L274.051 267.52" stroke="white" strokeWidth="17.3859" strokeLinecap="square"/>
                                 </>
                             ) : (
                                 <>
-                                    <path d="M20 225H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M20 20H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M20 122H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M123.156 250.678H297.408" stroke="white" strokeWidth="17.4689" strokeLinecap="square"/>
+                                    <path d="M123.156 161.15H297.408" stroke="white" strokeWidth="17.4689" strokeLinecap="square"/>
+                                    <path d="M123.156 205.696H297.408" stroke="white" strokeWidth="17.4689" strokeLinecap="square"/>
                                 </>
                             )}
                         </svg>

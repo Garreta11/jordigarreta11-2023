@@ -5,6 +5,8 @@
   height: 100vh;
   position: relative;
 
+  cursor: url('/svg/my-experiments.svg'), auto;
+
   &_tech {
     position: fixed;
     top: 50%;
