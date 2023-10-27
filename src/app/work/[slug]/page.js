@@ -20,7 +20,6 @@ const ProjectPage = ({params}) => {
             )
             .then(res => res.json())
             .then(data => {
-                // console.log(data);
                 data.forEach(d => {
                     if (d.slug === params.slug) {
                         setProject(d)
@@ -37,16 +36,6 @@ const ProjectPage = ({params}) => {
         <section className={styles.project}>
             {project && (
                 <>
-                    <motion.div
-                        initial={{opacity: 0, x: -20}}
-                        animate={{opacity: 1, x: 0}}
-                        transition={transitionBack}
-                    >
-                        <Link className={styles.project_arrow} href="/work/">
-                            {/* <img src="/svg/arrow.svg" /> */}
-                            Go back
-                        </Link>
-                    </motion.div>
                     <motion.h1
                         className={styles.project_title}
                         initial={{opacity: 0, x: -20}}
@@ -75,10 +64,8 @@ const ProjectPage = ({params}) => {
                         >
                             <div className={styles.project_info_credits} dangerouslySetInnerHTML={{__html: project.acf.credits}}/>
                             {project.acf.project_link && (
-                                <Link target="_blank" href={project.acf.project_link}>
-                                    <button className={styles.project_link}>
-                                        Project Link
-                                    </button>
+                                <Link target="_blank" href={project.acf.project_link} className={styles.project_link}>
+                                    Visit project
                                 </Link>
                             )}
                         </motion.div>

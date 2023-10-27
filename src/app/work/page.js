@@ -161,7 +161,7 @@ const WorkPage = () => {
     }
 
     return(
-        <main className={styles.main}>
+        <main className={`${isListOpen ? `${styles.main} ${styles.main_open}` : `${styles.main} ${styles.main_close}`}`}>
 
             {projects && (
                 <>
@@ -169,7 +169,6 @@ const WorkPage = () => {
                         className={`${isListOpen ? `${styles.main_list_container} ${styles.main_list_container_open}` : `${styles.main_list_container} ${styles.main_list_container_close}`}`}
                     >
                         <div className={styles.main_list_container_group}>
-                            <h6 className={styles.main_list_container_all}>All projects</h6>
                             {projects.map((project, index) => {
                                 const parser = new DOMParser();
                                 const parsedEntity = parser.parseFromString(project.title.rendered, "text/html");
@@ -186,23 +185,20 @@ const WorkPage = () => {
                     </div>
 
                     <div className={styles.main_list}>
-                        <svg className={styles.main_list_icon} onClick={handleClickList} width="964" height="964" viewBox="0 0 964 964" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="482" cy="482" r="463" stroke="#2F2F2F" strokeWidth="20"/>
+                        <svg className={styles.main_list_icon} onClick={handleClickList} width="420" height="250" viewBox="0 0 420 250" fill="none" xmlns="http://www.w3.org/2000/svg">
                             {isListOpen ? (
                                 <>
-                                    <path d="M374.541 365.423L598.566 589.449" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
-                                    <path d="M365.423 589.449L589.449 365.423" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
+                                    <path d="M28 227.5L373.544 28" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M38.5 28L384.044 227.5" stroke="white" strokeWidth="40" strokeLinecap="square"/>
                                 </>
                             ) : (
                                 <>
-                                    <path d="M235 597H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
-                                    <path d="M235 392H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
-                                    <path d="M235 494H751" stroke="#2F2F2F" strokeWidth="40" strokeLinecap="round"/>
+                                    <path d="M20 225H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M20 20H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M20 122H419" stroke="white" strokeWidth="40" strokeLinecap="square"/>
                                 </>
                             )}
                         </svg>
-
-                        <p className={styles.main_list_text}>{isListOpen ? '' : 'All projects'}</p>
                     </div>
 
                     <Canvas
@@ -217,13 +213,9 @@ const WorkPage = () => {
                     </Canvas>
 
                     <div className={styles.main_info}>
-                        <div>
-                            <p className={styles.main_info_title}>{projectTitle}</p>
-                            <p className={styles.main_info_categories}> - {projectCategories} -</p>
-                        </div>
-                        <button className={styles.main_info_button} onClick={Redirect}>
-                            View project
-                        </button>
+                        <Link className={styles.main_info_title} href={`/work/${projectSlug}`}>
+                            {projectTitle}
+                        </Link>
                         
                     </div>
                 </>
@@ -260,7 +252,7 @@ const Scene = ({sendIndex, categories, projects, tunnel}) => {
                 shadow-mapSize-width={1024}
             />
 
-            <fog attach="fog" color="white" near={1} far={DISTANCE + 10} />
+            {/* <fog attach="fog" color="white" near={1} far={DISTANCE + 10} /> */}
             
             <Suspense fallback={null}>
                 <ScrollControls damping={0.1} pages={projects.length} distance={1} infinite>
@@ -291,7 +283,7 @@ const Projects =({ getIndex, categories, projects, tunnel }) => {
         setIndex(i)
         
         // camera rotation
-        const speed = 0.1;
+        const speed = (window.innerWidth < 921) ? 0.1 : 0.9;
         gsap.to(camera.rotation, {
             x: mouse.y * speed,
             y: -mouse.x * speed,
@@ -315,6 +307,7 @@ const Project = ({categories, project, index, tunnel}) => {
     const [title, setTitle] = useState("");
     const [video, setVideo] = useState("");
     const [videoAspectRatio, setVideoAspectRatio] = useState("");
+    const [preview, setPreview] = useState("");
     const [videoPreview, setVideoPreview] = useState("");
     const [category, setCategory] = useState("");
 
@@ -329,6 +322,8 @@ const Project = ({categories, project, index, tunnel}) => {
         setVideoAspectRatio(project.acf.video.imatge_preview.width / project.acf.video.imatge_preview.height)
         // video preview
         setVideoPreview(project.acf.video.imatge_preview.url)
+        // preview
+        setPreview(project.acf.video.preview.url)
 
         if (categories && project) {
             for (let i = 0; i < project.categories.length; i++) {
@@ -364,53 +359,29 @@ const Project = ({categories, project, index, tunnel}) => {
         >
 
             { video && (
-                <Plane receiveShadow args={[3*videoAspectRatio, 3]} position={[0, 0, 0]}>
-                    <Suspense fallback={<FallbackMaterial url={videoPreview}/>}>
-                        { isMobile ? (
-                            <FallbackMaterial url={videoPreview}/>
-                        ) : (
-                            <VideoMaterial url={video} />
-                        )}
-                        
-                    </Suspense>
-                </Plane>
+                <>
+                    <Plane receiveShadow args={[3, 3]} position={[0, 0, 0]}>
+                        <PreviewMaterial url={preview} />
+                    </Plane>
+                    {/* <Plane receiveShadow args={[3, 3]} position={[0, 0, -0.5]}>
+                        <PreviewMaterial url={preview} />
+                    </Plane> */}
+                </>
             )}
         </group>
     )
 }
 
-// Fallback material
-const FallbackMaterial = ({url}) => {
-
+const PreviewMaterial = ({url}) => {
     const [texture, setTexture] = useState()
     const _texture = useTexture(url)
-
     useEffect(() => {
         setTexture(_texture)
     }, [])
-
-    return (
+    return(
         <>
             {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
-            )}
-        </>
-    )
-}
-
-// Video material
-const VideoMaterial = ({url}) => {
-
-    const [texture, setTexture] = useState()
-    const _texture = useVideoTexture(url)
-    useEffect(() => {
-        setTexture(_texture)
-    }, [])
-
-    return (
-        <>
-            {texture && (
-                <meshBasicMaterial map={texture} toneMapped={false} />
+                <meshBasicMaterial map={texture} transparent toneMapped={false} opacity={1.0}/>
             )}
         </>
     )

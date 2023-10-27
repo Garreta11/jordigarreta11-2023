@@ -5,6 +5,23 @@
 :root {
   --color-one: #2f2f2f;
   --color-two: #fdfdfd;
+
+  --jgd--black: #000000;
+  --jgd--white: #ffffff;
+
+  --padding-page: 10px;
+
+  --font-size-big: 5em;
+  --font-size-medium: 1.5em;
+  --font-size-small: 1em;
+  --font-size-smaller: 0.5em;
+
+  @include sm {
+    --font-size-big: 2em;
+    --font-size-medium: 1em;
+    --font-size-small: 1em;
+    --font-size-smaller: 0.5em;
+  }
 }
 
 // Global Style
@@ -14,6 +31,10 @@
   padding: 0;
   margin: 0;
   font-family: $fontwebsite;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 html,
@@ -22,13 +43,13 @@ body {
   height: 100%;
   overflow-x: hidden;
 
-  color: var(--color-one);
-  background-color: var(--color-two);
+  color: var(--jgd--white);
+  background-color: var(--jgd--black);
 
   transition: background-color ease 1s, color ease 1s;
 
   a {
-    color: var(--color-one);
+    color: var(--jgd--white);
     text-decoration: none;
 
     &:hover {

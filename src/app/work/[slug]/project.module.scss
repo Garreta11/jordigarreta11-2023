@@ -6,8 +6,8 @@
     top: 100px;
     padding-top: 50px;
     padding-bottom: 50px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: var(--padding-page);
+    padding-right: var(--padding-page);
     overflow-y: scroll;
 
     @include sm {
@@ -49,10 +49,11 @@
     }
 
     &_title {
-        font-size: 4em;
+        font-size: var(--font-size-big);
         margin-bottom: 50px;
+        text-transform: uppercase;
+        width: 70%;
         @include sm {
-            font-size: 3em;
             margin-bottom: 20px;
         }
     }
@@ -69,12 +70,11 @@
         }
 
         &_description {
-            font-size: 2em;
+            font-size: var(--font-size-medium);
             width: 70%;
             font-weight: 300;
             @include sm {
                 width: 100%;
-                font-size: 1em;
                 font-weight: 500;
             }
 
@@ -84,10 +84,8 @@
         }
 
         &_credits {
+            font-size: var(--font-size-small);
             text-align: right;
-            p {
-                margin-bottom: 20px;
-            }
         }
 
         &_right {
@@ -122,10 +120,10 @@
     }
 
     &_link {
+        text-transform: uppercase;
+        font-size: var(--font-size-medium);
         &:hover {
-            a {
-                color: var(--color-two);
-            }
+            font-weight: 800;
         }
     }
 

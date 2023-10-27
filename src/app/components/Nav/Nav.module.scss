@@ -1,0 +1,70 @@
+@use '../../_styles/breakpoints.scss' as *;
+
+.nav {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    text-transform: uppercase;
+
+    padding: var(--padding-page);
+
+    pointer-events: none;
+
+    &__header {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        &__title, &__about {
+            font-size: var(--font-size-big);
+            pointer-events: all;
+            @include sm {
+                line-height: 1em;
+            }
+        }
+
+        &__job {
+            font-size: var(--font-size-small);
+            pointer-events: all;
+
+            @include sm {
+                font-size: var(--font-size-smaller);
+            }
+        }
+    }
+
+    &__footer {
+        &__top {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--font-size-big);
+            pointer-events: all;
+
+            a {
+                &:hover {
+                    mix-blend-mode: difference;
+                }
+            }
+        }
+
+        &__bottom {
+            font-size: var(--font-size-medium);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: all;
+
+            @include sm {
+                font-size: var(--font-size-smaller);
+            }
+        }
+    }
+}
