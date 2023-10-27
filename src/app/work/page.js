@@ -188,8 +188,8 @@ const WorkPage = () => {
                         <svg className={styles.main_list_icon} onClick={handleClickList} width="420" height="250" viewBox="0 0 420 250" fill="none" xmlns="http://www.w3.org/2000/svg">
                             {isListOpen ? (
                                 <>
-                                    <path d="M28 227.5L373.544 28" stroke="white" strokeWidth="40" strokeLinecap="square"/>
-                                    <path d="M38.5 28L384.044 227.5" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M28.5295 310.486L310.665 28.3508" stroke="white" strokeWidth="40" strokeLinecap="square"/>
+                                    <path d="M43.3787 28.3508L325.514 310.486" stroke="white" strokeWidth="40" strokeLinecap="square"/>
                                 </>
                             ) : (
                                 <>
