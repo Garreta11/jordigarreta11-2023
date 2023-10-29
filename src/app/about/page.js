@@ -95,7 +95,7 @@ const Marquee = ({cvPage}) => {
                     disableOnInteraction: false,
                 }}
                 loop={true}
-                speed={10000}
+                speed={3000}
                 freeModeMomentum={false}
                 freeMode={true}
                 mousewheel={false}
