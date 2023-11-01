@@ -43,29 +43,34 @@ const AboutPage = () => {
         <main
             className={styles.about}
         >
-            {aboutPage && (
-                <div className={styles.about_about}>
-                    <motion.p
-                        initial={{opacity: 0, x: -20}}
-                        animate={{opacity: 1, x: 0}}
-                        transition={transition}
-                        className={styles.about_about_description}
-                    >
-                        {aboutPage.acf.description}
-                    </motion.p>
-                </div>
-            )}
+            <div className={styles.about__wrapper}>
+                {aboutPage && (
+                    <div className={styles.about_about}>
+                        <motion.p
+                            initial={{opacity: 0, x: -20}}
+                            animate={{opacity: 1, x: 0}}
+                            transition={transition}
+                            className={styles.about_about_description}
+                        >
+                            {aboutPage.acf.description}
+                        </motion.p>
+                    </div>
+                )}
+                
+                {aboutPage && (
+                    <Friends aboutPage={aboutPage} />
+                )}
+
+            </div>
             {cvPage && (
                 <Marquee cvPage={cvPage} />
             )}
-            {aboutPage && (
-                <Friends aboutPage={aboutPage} />
-            )}
+            
+
+
         </main>
     )
 }
-
-
 
 const Marquee = ({cvPage}) => {
 
@@ -118,22 +123,12 @@ const Marquee = ({cvPage}) => {
 }
 
 const Friends = ({aboutPage}) => {
-    const [friends, setFriends] = useState([])
 
-    useEffect(() => {
-        let s = aboutPage.acf.friends.replaceAll('<p>', '')
-        s = s.replaceAll('</p>', '')
-        
-        // setFriends(s.split('\n'))
-        console.log(aboutPage.acf.friends)
-
-    }, [])
     return(
         <div className={styles.about__friends}>
             <h3>FRIENDS</h3>
-            {friends && (
-                <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
-            )}
+    
+            <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
         </div>
     )
 }
