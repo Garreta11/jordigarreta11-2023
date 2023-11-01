@@ -12,6 +12,7 @@ const transitionCredits = { delay: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96
 
 const ProjectPage = ({params}) => {
     const [project, setProject] = useState()
+    const [projectTitle, setProjectTitle] = useState()
     const [nextProject, setNextProject] = useState()
 
     useEffect(() => {
@@ -24,7 +25,13 @@ const ProjectPage = ({params}) => {
                 data.forEach(d => {
                     if (d.slug === params.slug) {
                         setProject(d)
-                        console.log(d)
+
+                        const parser = new DOMParser();
+                        const parsedEntity = parser.parseFromString(d.title.rendered, "text/html");
+                        const t = parsedEntity.documentElement.textContent;
+
+                        setProjectTitle(t)
+
                         if (d.next !== null) {
                             setNextProject(d.next.slug)
                         } else {
@@ -48,7 +55,7 @@ const ProjectPage = ({params}) => {
                         animate={{opacity: 1, x: 0}}
                         transition={transitionTitle}
                     >
-                        {project.title.rendered}
+                        {projectTitle}
                     </motion.h1>
                     
                     <div className={styles.project_info}>
