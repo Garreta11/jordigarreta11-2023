@@ -8,9 +8,8 @@ import { Mousewheel, Autoplay, FreeMode} from 'swiper/modules';
 import 'swiper/css';
 
 const transition = { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
-const transitionCV = { delay: 2, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
-const transitionMake = { delay: 1, ease: [0.43, 0.13, 0.23, 0.96] };
-const transitionFriends = { delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionFriends = { delay: 1.0, ease: [0.43, 0.13, 0.23, 0.96] };
+const transitionMarquee = { delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const AboutPage = () => {
 
@@ -91,7 +90,11 @@ const Marquee = ({cvPage}) => {
 
 
     return(
-        <>
+        <motion.div
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={transitionMarquee}
+        >
             <Swiper
                 ref={swiperRef}
                 slidesPerView='auto'
@@ -118,18 +121,23 @@ const Marquee = ({cvPage}) => {
                     ))
                 }
             </Swiper>
-        </>
+        </motion.div>
     )
 }
 
 const Friends = ({aboutPage}) => {
 
     return(
-        <div className={styles.about__friends}>
+        <motion.div
+            className={styles.about__friends}
+            initial={{opacity: 0, x: 20}}
+            animate={{opacity: 1, x: 0}}
+            transition={transitionFriends}
+        >
             <h3>FRIENDS</h3>
     
             <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
-        </div>
+        </motion.div>
     )
 }
 
