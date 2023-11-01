@@ -45,10 +45,6 @@ const LabPage = () => {
 
     const [tech, setTech] = useState("");
 
-    const handleTech = (_tech) => {
-        setTech(_tech);
-    }
-
     return(
         <motion.main className={styles.labpage}>     
             {experiments && (
@@ -65,6 +61,20 @@ const LabPage = () => {
                         const currentSlide = _swiper.slides[_swiper.activeIndex];
                         const t = currentSlide.children[0].dataset.tech;
                         setTech(t)
+
+                        _swiper.slides.forEach((slide, index) => {
+                            if (index === _swiper.activeIndex) {
+                                const video = slide.querySelector('video')
+                                if (video !== null) {
+                                    video.play()
+                                }
+                            } else {
+                                const video = slide.querySelector('video')
+                                if (video !== null) {
+                                    video.pause()
+                                }
+                            }
+                        })
                     }}
                 >
                     {experiments.map((experiment, index) => {
@@ -88,38 +98,12 @@ const LabPage = () => {
 
 const Experiment = ({ experiment, isMobile }) => {
 
-    const infoRef = useRef()
-    const [showInfo, setShowInfo] = useState(false)
-
     const fileType = experiment.acf.file.type 
-
-    const handlePointerEnter = (event) => {
-        const targetElement = event.currentTarget
-        const video = targetElement.querySelector('video')
-        if (video !== null) {
-            video.play()
-        }
-
-        setShowInfo(true)
-    }
-
-    const handlePointerLeave = (event) => {
-        const targetElement = event.currentTarget
-        const video = targetElement.querySelector('video')
-
-        if (video !== null) {
-            video.pause()
-        }
-
-        setShowInfo(false)
-    }
 
     return(
         <>
             <div
                 className={styles.experiment}
-                onMouseOver={(e) => handlePointerEnter(e)}
-                onMouseLeave={(e) => handlePointerLeave(e)}
                 data-tech={experiment.acf.info.technology}
             >
                 {fileType === 'video' ? (
