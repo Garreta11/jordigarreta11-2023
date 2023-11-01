@@ -102,6 +102,10 @@
       text-align: right;
       text-transform: uppercase;
 
+      @include sm {
+        margin-bottom: 50px;
+      }
+
       h3 {
         font-size: var(--font-size-medium);
       }
