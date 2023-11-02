@@ -15,7 +15,6 @@ const BackgroundVideo = ({videoLoaded}) => {
             .then(res => res.json())
             .then(data => {
                 setVideoBG(data.acf.video_bg.url);
-                console.log(data.acf.video_bg.url)
 
                 videoLoaded();
             })
