@@ -57,6 +57,8 @@ const WorkPage = () => {
 
     const [isListOpen, setIsListOpen] = useState(false);
 
+    const swipeRef = useRef()
+
     let loaders
     let toLoad
     let items = {}
@@ -214,7 +216,7 @@ const WorkPage = () => {
                         className={styles.main_canvas}
                     >
                         <Suspense fallback={<Loader />}>
-                            <Scene sendIndex={sendIndex} categories={categories} projects={projects} tunnel={tunnel}/>
+                            <Scene sendIndex={sendIndex} categories={categories} projects={projects} tunnel={tunnel} swipeEl={swipeRef}/>
                         </Suspense>
                     </Canvas>
 
@@ -226,6 +228,7 @@ const WorkPage = () => {
 
                     <motion.div
                         className={styles.main_swipe_text}
+                        ref={swipeRef}
                     >
                         <motion.p
                             initial={{opacity: 0, y: 20}}
@@ -243,7 +246,7 @@ const WorkPage = () => {
 }
 
 // Scene
-const Scene = ({sendIndex, categories, projects, tunnel}) => {
+const Scene = ({sendIndex, categories, projects, tunnel, swipeEl}) => {
 
     const getIndex = (index) => {
         sendIndex(index)
@@ -273,7 +276,7 @@ const Scene = ({sendIndex, categories, projects, tunnel}) => {
             
             <Suspense fallback={null}>
                 <ScrollControls damping={0.1} pages={projects.length} distance={1} infinite>
-                    <Projects getIndex={getIndex} categories={categories} projects={projects} tunnel={tunnel}/>
+                    <Projects getIndex={getIndex} categories={categories} projects={projects} tunnel={tunnel} swipeEl={swipeEl} />
                 </ScrollControls>
             </Suspense>
         </>
@@ -281,13 +284,14 @@ const Scene = ({sendIndex, categories, projects, tunnel}) => {
 }
 
 // All Projects
-const Projects =({ getIndex, categories, projects, tunnel, sendScroll}) => {
+const Projects =({ getIndex, categories, projects, tunnel, swipeEl}) => {
     const projectsRef = useRef()
     const scroll = useScroll()
     const { camera, mouse } = useThree()
     const [index, setIndex] = useState(0)
 
     let oldscrolloffset = scroll.offset
+
 
     useEffect(() => {
         getIndex(index)
@@ -307,7 +311,13 @@ const Projects =({ getIndex, categories, projects, tunnel, sendScroll}) => {
             x: mouse.y * speed,
             y: -mouse.x * speed,
             z: 0
-        })        
+        })
+
+        // hide swipe up
+        if (oldscrolloffset != scroll.offset) {
+            swipeEl.current.classList.add('hide')
+        }
+        oldscrolloffset = scroll.offset
 
     })
 
