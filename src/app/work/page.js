@@ -215,8 +215,11 @@ const WorkPage = () => {
                     <div className={styles.main_info}>
                         <Link className={styles.main_info_title} href={`/work/${projectSlug}`}>
                             {projectTitle}
-                        </Link>
-                        
+                        </Link>                  
+                    </div>
+
+                    <div className={styles.main_swipe}>
+                        <p>Swipe up</p>
                     </div>
                 </>
             )}

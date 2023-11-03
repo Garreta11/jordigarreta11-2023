@@ -177,6 +177,17 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     }
   }
 
+  &_swipe {
+    display: none;
+    @include sm {
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: 90%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
   @keyframes fadein {
     from {
       opacity: 0;
