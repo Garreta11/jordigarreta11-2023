@@ -178,13 +178,22 @@ $animationfadein: fadein ease 0.5s forwards 2s;
   }
 
   &_swipe {
-    display: none;
-    @include sm {
-      display: block;
-      position: fixed;
-      left: 50%;
-      top: 80%;
-      transform: translate(-50%, -50%);
+
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    
+    &_text {
+      display: none;
+      @include sm {
+        display: block;
+        position: fixed;
+        left: 50%;
+        top: 80%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
 

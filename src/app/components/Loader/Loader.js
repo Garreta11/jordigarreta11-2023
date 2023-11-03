@@ -5,13 +5,13 @@ const Loader = () => {
     const { progress } = useProgress()
 
     return(
-        <Html center style={{backgroundColor: "white", color:"black"}}>
+        <Html center style={{backgroundColor: "transparent", color:"white"}}>
             <div style={
                 {
-                    fontSize: "150px"
+                    fontSize: "2em"
                 }
             }>
-                <p>{Math.ceil(progress) + "%"}</p>
+                <p>WORK</p>
             </div>
         </Html>
     )

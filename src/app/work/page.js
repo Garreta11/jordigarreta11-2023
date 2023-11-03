@@ -16,6 +16,8 @@ import { ScrollControls, Plane, useTexture, useVideoTexture, useScroll, Environm
 // gsap
 import gsap from "gsap";
 
+import { motion } from 'framer-motion'
+
 // sources
 import sources from '../sources';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -28,6 +30,8 @@ import * as THREE from 'three'
 import Loader from '../components/Loader/Loader'
 
 const DISTANCE = 20
+
+const transitionSwipe = { duration: 1, delay: 3, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const decode = (str) => {
     return str.replace(/&#(\d+);/g, function(match, dec) {
@@ -57,6 +61,8 @@ const WorkPage = () => {
     let toLoad
     let items = {}
     let loaded = 0
+
+    const scroll = useScroll()
 
     useEffect(() => {
         async function fetchData() {
@@ -218,9 +224,17 @@ const WorkPage = () => {
                         </Link>                  
                     </div>
 
-                    <div className={styles.main_swipe}>
-                        <p>Swipe up</p>
-                    </div>
+                    <motion.div
+                        className={styles.main_swipe_text}
+                    >
+                        <motion.p
+                            initial={{opacity: 0, y: 20}}
+                            animate={{opacity: 1, y: 0}}
+                            transition={transitionSwipe}
+                        >
+                            Swipe up
+                        </motion.p>
+                    </motion.div>
                 </>
             )}
 
@@ -267,11 +281,13 @@ const Scene = ({sendIndex, categories, projects, tunnel}) => {
 }
 
 // All Projects
-const Projects =({ getIndex, categories, projects, tunnel }) => {
+const Projects =({ getIndex, categories, projects, tunnel, sendScroll}) => {
     const projectsRef = useRef()
     const scroll = useScroll()
     const { camera, mouse } = useThree()
     const [index, setIndex] = useState(0)
+
+    let oldscrolloffset = scroll.offset
 
     useEffect(() => {
         getIndex(index)
@@ -291,7 +307,8 @@ const Projects =({ getIndex, categories, projects, tunnel }) => {
             x: mouse.y * speed,
             y: -mouse.x * speed,
             z: 0
-        })
+        })        
+
     })
 
     return(
