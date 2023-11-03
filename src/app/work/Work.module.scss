@@ -181,7 +181,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     display: none;
     @include sm {
       display: block;
-      position: absolute;
+      position: fixed;
       left: 50%;
       top: 90%;
       transform: translate(-50%, -50%);
