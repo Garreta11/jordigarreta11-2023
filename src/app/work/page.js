@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 // css
 import styles from './Work.module.scss'
@@ -10,20 +9,13 @@ import styles from './Work.module.scss'
 import { useEffect, useState, useRef, Suspense } from 'react';
 
 // react three fiber / drei
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { ScrollControls, Plane, useTexture, useVideoTexture, useScroll, Environment, Html, Center} from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { ScrollControls, Plane, useTexture, useScroll, Environment } from '@react-three/drei';
 
 // gsap
 import gsap from "gsap";
 
 import { motion } from 'framer-motion'
-
-// sources
-import sources from '../sources';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { TextureLoader } from 'three/src/loaders/TextureLoader'
-
-import * as THREE from 'three'
 
 
 // loader
@@ -33,38 +25,15 @@ const DISTANCE = 20
 
 const transitionSwipe = { duration: 1, delay: 3, ease: [0.43, 0.13, 0.23, 0.96] };
 
-const decode = (str) => {
-    return str.replace(/&#(\d+);/g, function(match, dec) {
-        return String.fromCharCode(dec);
-    });
-}
-
 // WorkPage
 const WorkPage = () => {
 
-    const router = useRouter()
-
-    const [projects, setProjects] = useState();
-    const [categories, setCategories] = useState();
-    const [isLoaded, setIsLoaded] = useState(false)
-
-    const [column, setColumn] = useState()
-    const [tunnel, setTunnel] = useState()
-
+    const [projects, setProjects] = useState();    
     const [projectTitle, setProjectTitle] = useState()
-    const [projectCategories, setProjectCategories] = useState()
     const [projectSlug, setProjectSlug] = useState()
-
     const [isListOpen, setIsListOpen] = useState(false);
 
     const swipeRef = useRef()
-
-    let loaders
-    let toLoad
-    let items = {}
-    let loaded = 0
-
-    const scroll = useScroll()
 
     useEffect(() => {
         async function fetchData() {
@@ -74,63 +43,10 @@ const WorkPage = () => {
             .then(res => res.json())
             .then(data => {
                 setProjects(data);
-
-                fetchCat()
             })
         }
         fetchData()
-
-        async function fetchCat() {
-            const res = await fetch(
-                'https://dashboard.jordigarreta.com/wp-json/wp/v2/categories?_embed&per_page=100',
-            )
-            .then(res => res.json())
-            .then(data => {
-                setCategories(data);
-
-                // load models
-                toLoad = sources.length;
-                setLoaders()
-                startLoading(sources)
-            })
-        }
     }, [])
-
-    const setLoaders = () => {
-        loaders = {};
-        loaders.gltfLoader = new GLTFLoader();
-        loaders.textureLoader = new TextureLoader();
-    }
-
-    const startLoading = (allSources) => {
-    
-        for (const source of allSources) {
-            if (source.type === "gltfModel") {
-              loaders.gltfLoader.load(source.path, (model) => {
-                sourceLoaded(source, model);
-                if (source.name === 'column') {
-                    setColumn(model)
-                }
-                if (source.name === 'tunnel') {
-                    setTunnel(model)
-                }
-              });
-            } else if (source.type === "textureModel") {
-              loaders.textureLoader.load(source.path, (texture) => {
-                sourceLoaded(source, texture);
-              });
-            }
-        }     
-    }
-
-    const sourceLoaded = (source, file) => {
-        items[source.name] = file;
-        loaded++;
-        if (loaded === toLoad) {
-          console.log('** READY **')
-          setIsLoaded(true)
-        }
-    }
 
     const sendIndex = (index) => {
         projects.forEach((project, i) => {
@@ -140,29 +56,9 @@ const WorkPage = () => {
                 const t = parsedEntity.documentElement.textContent;
                 setProjectTitle(t)
                 setProjectSlug(project.slug)
-
-                let cats = ""
-                
-                if (categories) {
-                    project.categories.forEach((cat, index) => {
-                        categories.forEach(c => {
-                            if (cat === c.id) {
-                                cats += (index === project.categories.length - 1) ? c.name : (c.name + " / ");
-                            }
-                        })
-                        setProjectCategories(cats)
-                    })
-                }
-
             }
         })
     }
-
-    const Redirect = (e) => {
-        e.preventDefault();
-        router.push( `/work/${projectSlug}`, { name: 'Jordi' });
-    }
-
     const handleClickList = () => {
         const b = isListOpen;
         setIsListOpen(!b)
@@ -216,7 +112,7 @@ const WorkPage = () => {
                         className={styles.main_canvas}
                     >
                         <Suspense fallback={<Loader />}>
-                            <Scene sendIndex={sendIndex} categories={categories} projects={projects} tunnel={tunnel} swipeEl={swipeRef}/>
+                            <Scene sendIndex={sendIndex} projects={projects} swipeEl={swipeRef}/>
                         </Suspense>
                     </Canvas>
 
@@ -246,7 +142,7 @@ const WorkPage = () => {
 }
 
 // Scene
-const Scene = ({sendIndex, categories, projects, tunnel, swipeEl}) => {
+const Scene = ({sendIndex, projects, swipeEl}) => {
 
     const getIndex = (index) => {
         sendIndex(index)
@@ -276,7 +172,7 @@ const Scene = ({sendIndex, categories, projects, tunnel, swipeEl}) => {
             
             <Suspense fallback={null}>
                 <ScrollControls damping={0.1} pages={projects.length} distance={1} infinite>
-                    <Projects getIndex={getIndex} categories={categories} projects={projects} tunnel={tunnel} swipeEl={swipeEl} />
+                    <Projects getIndex={getIndex} projects={projects} swipeEl={swipeEl} />
                 </ScrollControls>
             </Suspense>
         </>
@@ -284,7 +180,7 @@ const Scene = ({sendIndex, categories, projects, tunnel, swipeEl}) => {
 }
 
 // All Projects
-const Projects =({ getIndex, categories, projects, tunnel, swipeEl}) => {
+const Projects =({ getIndex, projects, swipeEl}) => {
     const projectsRef = useRef()
     const scroll = useScroll()
     const { camera, mouse } = useThree()
@@ -325,7 +221,7 @@ const Projects =({ getIndex, categories, projects, tunnel, swipeEl}) => {
         <group ref={projectsRef} position={[0, -1.5, 0]}>
             {projects.map((project, index) => {
                 return (
-                    <Project key={index} categories={categories} project={project} index={index} tunnel={tunnel}/>
+                    <Project key={index} project={project} index={index} />
                 )
             })}
         </group>
@@ -333,69 +229,23 @@ const Projects =({ getIndex, categories, projects, tunnel, swipeEl}) => {
 } 
 
 // Project
-const Project = ({categories, project, index, tunnel}) => {
-    const [title, setTitle] = useState("");
-    const [video, setVideo] = useState("");
-    const [videoAspectRatio, setVideoAspectRatio] = useState("");
+const Project = ({ project, index}) => {
     const [preview, setPreview] = useState("");
-    const [videoPreview, setVideoPreview] = useState("");
-    const [category, setCategory] = useState("");
-
-    const [isMobile, setIsMobile] = useState(false)
 
     useEffect(() => {
-        // title
-        setTitle(project.title.rendered)
-        // video
-        setVideo(project.acf.video.video.url)
-        // video aspect ratio
-        setVideoAspectRatio(project.acf.video.imatge_preview.width / project.acf.video.imatge_preview.height)
-        // video preview
-        setVideoPreview(project.acf.video.imatge_preview.url)
-        // preview
         setPreview(project.acf.video.preview.url)
-
-        if (categories && project) {
-            for (let i = 0; i < project.categories.length; i++) {
-                for (let j = 0; j < categories.length; j++) {
-                    if (project.categories[i] == categories[j].id) {
-                        setCategory(categories[j].name);
-                    }
-                }
-            }
-        }
-    }, [project, categories])
-
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 921) {
-                setIsMobile(true)
-            } else {
-                setIsMobile(false)
-            }
-        }
-
-        handleResize()
-
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    }, [project])
 
     return(
         <group
             position={[0, 0, -index * DISTANCE]}
         >
 
-            { video && (
+            { preview && (
                 <>
                     <Plane receiveShadow args={[3, 3]} position={[0, 0, 0]}>
                         <PreviewMaterial url={preview} />
                     </Plane>
-                    {/* <Plane receiveShadow args={[3, 3]} position={[0, 0, -0.5]}>
-                        <PreviewMaterial url={preview} />
-                    </Plane> */}
                 </>
             )}
         </group>

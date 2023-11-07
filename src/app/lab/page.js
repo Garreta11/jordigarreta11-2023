@@ -25,24 +25,6 @@ const LabPage = () => {
         fetchData()
     }, [])
 
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-        function handleResize() {
-            if (window.innerWidth < 921) {
-                setIsMobile(true);
-            } else {
-                setIsMobile(false);
-            }
-        }
-
-        handleResize(); // Check initial size
-        window.addEventListener('resize', handleResize); // Attach event listener
-
-        return () => {
-            window.removeEventListener('resize', handleResize); // Remove event listener on unmount
-        };
-    }, []);
-
     const [tech, setTech] = useState("");
 
     return(
@@ -50,7 +32,7 @@ const LabPage = () => {
             {experiments && (
                 <Swiper
                     ref={swiperRef}
-                    slidesPerView={isMobile ? "auto" : "auto"}
+                    slidesPerView={"auto"}
                     spaceBetween={0}
                     loop={true}
                     freeMode={true}
@@ -83,7 +65,7 @@ const LabPage = () => {
                                 className={styles.swiperslide}
                                 key={index}
                             >
-                                <Experiment experiment={experiment} isMobile={isMobile}/>
+                                <Experiment experiment={experiment}/>
                             </SwiperSlide>
                         )
                     })}
@@ -96,7 +78,7 @@ const LabPage = () => {
     )
 }
 
-const Experiment = ({ experiment, isMobile }) => {
+const Experiment = ({ experiment }) => {
 
     const fileType = experiment.acf.file.type 
 
@@ -112,7 +94,7 @@ const Experiment = ({ experiment, isMobile }) => {
                         src={experiment.acf.file.url}
                         loop
                         muted
-                        autoPlay={isMobile ? true : false}
+                        autoPlay={false}
                         playsInline={true}
                     >
                         <source src={experiment.acf.file.url} type="video/mp4" />

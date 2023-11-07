@@ -3,9 +3,7 @@ import Link from 'next/link'
 import styles from './project.module.scss'
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
-import next from 'next';
 
-const transitionBack = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 const transitionTitle = { duration: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 const transitionDescription = { delay: 0.5, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
 const transitionCredits = { delay: 1, duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
