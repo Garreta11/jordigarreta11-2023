@@ -1,6 +1,6 @@
 'use client'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Mousewheel, Autoplay, FreeMode} from 'swiper/modules';
+import { Mousewheel, Autoplay, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import styles from './Lab.module.scss'
 import { useEffect, useRef, useState } from 'react';
@@ -17,18 +17,18 @@ const LabPage = () => {
             const res = await fetch(
                 'https://dashboard.jordigarreta.com/wp-json/wp/v2/experiments?_embed&per_page=100'
             )
-            .then(res => res.json())
-            .then(data => {
-                setExperiments(data);
-            })
+                .then(res => res.json())
+                .then(data => {
+                    setExperiments(data);
+                })
         }
         fetchData()
     }, [])
 
     const [tech, setTech] = useState("");
 
-    return(
-        <motion.main className={styles.labpage}>     
+    return (
+        <motion.main className={styles.labpage}>
             {experiments && (
                 <Swiper
                     ref={swiperRef}
@@ -60,29 +60,29 @@ const LabPage = () => {
                     }}
                 >
                     {experiments.map((experiment, index) => {
-                        return(
+                        return (
                             <SwiperSlide
                                 className={styles.swiperslide}
                                 key={index}
                             >
-                                <Experiment experiment={experiment}/>
+                                <Experiment experiment={experiment} />
                             </SwiperSlide>
                         )
                     })}
                 </Swiper>
             )}
-            
+
             <p className={styles.labpage_tech}>{tech}</p>
-        
+
         </motion.main>
     )
 }
 
 const Experiment = ({ experiment }) => {
 
-    const fileType = experiment.acf.file.type 
+    const fileType = experiment.acf.file.type
 
-    return(
+    return (
         <>
             <div
                 className={styles.experiment}
