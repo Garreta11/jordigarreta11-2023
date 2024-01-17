@@ -1,16 +1,15 @@
 'use client'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Mousewheel, Autoplay, FreeMode } from 'swiper/modules';
-import 'swiper/css';
+
 import styles from './Lab.module.scss'
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-import { motion } from 'framer-motion';
+gsap.registerPlugin(ScrollTrigger);
 
 const LabPage = () => {
 
-    const swiperRef = useRef()
-    const [experiments, setExperiments] = useState();
+    const [experiments, setExperiments] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -25,86 +24,115 @@ const LabPage = () => {
         fetchData()
     }, [])
 
-    const [tech, setTech] = useState("");
+    return (
+        <section className={styles.lab}>
+            <div className={styles.lab__items}>
+                {experiments.map((experiment, index) => (
+                    <LabItem key={index} experiment={experiment} />
+                ))}
+            </div>
+        </section>
+    )
+}
+
+const LabItem = ({ experiment }) => {
+
+    const aspectRatio = experiment.acf.file.width > experiment.acf.file.height ? 'horizontal' : 'vertical';
+
+    useEffect(() => {
+        gsap.utils.toArray(".parallax-image").forEach((section, i) => {
+            const heightDiff = section.offsetHeight - section.parentElement.offsetHeight;
+
+            gsap.fromTo(section, {
+                y: -heightDiff
+            }, {
+                scrollTrigger: {
+                    trigger: section.parentElement,
+                    scrub: true
+                },
+                y: 0,
+                ease: "none"
+            });
+        });
+    }, [])
 
     return (
-        <motion.main className={styles.labpage}>
-            {experiments && (
-                <Swiper
-                    ref={swiperRef}
-                    slidesPerView={"auto"}
-                    spaceBetween={0}
-                    loop={true}
-                    freeMode={true}
-                    mousewheel={true}
-                    modules={[Autoplay, Mousewheel, FreeMode]}
-                    className={styles.myswiper}
-                    onSlideChange={(_swiper) => {
-                        const currentSlide = _swiper.slides[_swiper.activeIndex];
-                        const t = currentSlide.children[0].dataset.tech;
-                        setTech(t)
-
-                        _swiper.slides.forEach((slide, index) => {
-                            if (index === _swiper.activeIndex) {
-                                const video = slide.querySelector('video')
-                                if (video !== null) {
-                                    video.play()
-                                }
-                            } else {
-                                const video = slide.querySelector('video')
-                                if (video !== null) {
-                                    video.pause()
-                                }
-                            }
-                        })
-                    }}
-                >
-                    {experiments.map((experiment, index) => {
-                        return (
-                            <SwiperSlide
-                                className={styles.swiperslide}
-                                key={index}
-                            >
-                                <Experiment experiment={experiment} />
-                            </SwiperSlide>
-                        )
-                    })}
-                </Swiper>
-            )}
-
-            <p className={styles.labpage_tech}>{tech}</p>
-
-        </motion.main>
+        <div className={styles.lab__items__item}>
+            <div
+                className={`${styles.lab__items__item__wrapper} ${aspectRatio === 'horizontal' ? styles.lab__items__item__wrapper__horizontal : styles.lab__items__item__wrapper__vertical
+                    }`}
+            >
+                <div className={`parallax-image ${styles.lab__items__item__media}`}>
+                    <Experiment experiment={experiment} />
+                </div>
+            </div>
+            <p className={styles.lab__items__item__tech}>{experiment.acf.info.technology}</p>
+        </div>
     )
 }
 
 const Experiment = ({ experiment }) => {
-
     const fileType = experiment.acf.file.type
+
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    const handleMouseOver = () => {
+        if (videoRef.current) {
+            videoRef.current.play();
+            setIsPlaying(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (videoRef.current) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+            const autoPlayValue = window.innerWidth < 921;
+            if (videoRef.current) {
+                videoRef.current.autoplay = autoPlayValue;
+                setIsPlaying(autoPlayValue);
+            }
+        };
+
+        // Initial setup
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
         <>
-            <div
-                className={styles.experiment}
-                data-tech={experiment.acf.info.technology}
-            >
-                {fileType === 'video' ? (
-                    <video
-                        className={styles.experiment_videoElement}
-                        src={experiment.acf.file.url}
-                        loop
-                        muted
-                        autoPlay={false}
-                        playsInline={true}
-                    >
-                        <source src={experiment.acf.file.url} type="video/mp4" />
-                    </video>
-                ) : (
-                    <img className={styles.experiment_videoElement} src={experiment.acf.file.url} />
-                )}
-            </div>
+            {fileType === 'video' ? (
+                <video
+                    ref={videoRef}
+                    className={styles.lab__items__item__media__video}
+                    src={experiment.acf.file.url}
+                    loop
+                    muted
+                    autoPlay={window.innerWidth < 921}
+                    playsInline={true}
+                    onMouseOver={handleMouseOver}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <source src={experiment.acf.file.url} type="video/mp4" />
+                </video>
+            ) : (
+                <img className={styles.lab__items__item__media__img} src={experiment.acf.file.url} />
+            )}
         </>
     )
 }
 
-export default LabPage;
+export default LabPage

@@ -1,127 +1,182 @@
 @use '../_styles/breakpoints.scss' as *;
 
 .about {
-    flex-direction: column;
-    justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 150px;
+  padding-bottom: 150px;
+  min-height: 100vh;
+  padding-left: var(--padding-page);
+  padding-right: var(--padding-page);
+
+  cursor: url('/svg/contact-me.svg'), auto;
+
+  /* cursor: url('/svg/scroll.svg'), auto; */
+
+  &__wrapper {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    padding-top: 150px;
-    padding-bottom: 150px;
-    min-height: 100vh;
-    padding-left: var(--padding-page);
-    padding-right: var(--padding-page);
+    // height: 50vh;
 
-    cursor: url('/svg/contact-me.svg'), auto;
-
-    /* cursor: url('/svg/scroll.svg'), auto; */
-
-    &__wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 50vh;
-
-      @include sm {
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: flex-start;
-        height: auto;
-      }
+    @include sm {
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-start;
+      height: auto;
     }
+  }
 
-    &_about {
-      width: 100%;
+  &_about {
+    width: 100%;
 
-      &_description {
-        font-size: 2em;
+    &_description {
+      font-size: 2em;
+      margin-bottom: 50px;
+      width: 70%;
+      font-weight: 300;
+
+      p {
         margin-bottom: 50px;
-        width: 70%;
-        font-weight: 300;
-        @include sm {
-          width: 100%;
-          font-size: 1em;
-        }
-      }
-
-      &_info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        @include sm {
-          flex-direction: column;
-          align-items: normal;
-        }
-      }
-
-      &_make {
-        font-size: var(--font-size-big);
-        width: 100%;
-        @include sm {
-          font-size: 3em;
-          margin-bottom: 20px;
-        }
-      }
-
-      &_friends {
-        text-align: right;
-
         @include sm {
           margin-bottom: 30px;
         }
-
-        &_title {
-          font-size: 3em;
-          @include sm {
-            font-size: 2em;
-          }
-        }
-        strong {
-          font-size: 2em;
-          font-weight: 100;
-
-          @include sm {
-            font-size: 1em;
-          }
-        }
       }
-      
-    }
-
-    &__marquee {
-      &__slide {
-        position: relative;
-        width: auto;
-        font-size: var(--font-size-big);
-        margin-left: 10px;
-        margin-right: 10px;
-        text-transform: uppercase;
-      }
-
-    }
-
-    &__friends {
-      text-align: right;
-      text-transform: uppercase;
 
       @include sm {
-        margin-bottom: 50px;
+        width: 100%;
+        font-size: 1em;
+      }
+    }
+
+    &_info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @include sm {
+        flex-direction: column;
+        align-items: normal;
+      }
+    }
+
+    &_make {
+      font-size: var(--font-size-big);
+      width: 100%;
+
+      @include sm {
+        font-size: 3em;
+        margin-bottom: 20px;
+      }
+    }
+
+    &_friends {
+      text-align: right;
+
+      @include sm {
+        margin-bottom: 30px;
       }
 
-      h3 {
-        font-size: var(--font-size-medium);
-      }
-
-      a, p {
-        font-size: var(--font-size-small);
-        &:hover {
-          font-weight: 800;
-        }
+      &_title {
+        font-size: 3em;
 
         @include sm {
-          font-size: var(--font-size-smaller);
+          font-size: 2em;
+        }
+      }
+
+      strong {
+        font-size: 2em;
+        font-weight: 100;
+
+        @include sm {
+          font-size: 1em;
         }
       }
     }
+
+  }
+
+  &__marquee {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0px;
+
+    &__content {
+      display: inline-block;
+      margin-top: 5px;
+      animation: marquee 80s linear infinite;
+
+      &__1 {
+        position: relative;
+        left: 0%;
+        animation: swap 80s linear infinite;
+      }
+
+      &__skill {
+        display: inline-block;
+        padding: 0 50px;
+
+        font-size: var(--font-size-big);
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &__friends {
+    text-align: right;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    @include sm {
+      margin-bottom: 50px;
+    }
+
+    h3 {
+      font-size: var(--font-size-medium);
+    }
+
+    a,
+    p {
+      font-size: var(--font-size-small);
+
+      &:hover {
+        font-weight: 800;
+      }
+
+      @include sm {
+        font-size: var(--font-size-smaller);
+      }
+    }
+  }
+}
+
+/* Transition */
+@keyframes marquee {
+  0% {
+    transform: translateX(0)
+  }
+
+  100% {
+    transform: translateX(-100%)
+  }
+}
+
+
+@keyframes swap {
+
+  0%,
+  50% {
+    left: 0%;
+  }
+
+  50.01%,
+  100% {
+    left: 100%;
+  }
 }
 
 .animation {

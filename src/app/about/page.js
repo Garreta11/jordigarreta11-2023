@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useInsertionEffect } from 'react'
 import { motion } from 'framer-motion'
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Mousewheel, Autoplay, FreeMode} from 'swiper/modules';
+import { Mousewheel, Autoplay, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 
 const transition = { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] };
@@ -22,40 +22,38 @@ const AboutPage = () => {
             const res = await fetch(
                 'https://dashboard.jordigarreta.com/wp-json/wp/v2/pages'
             )
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(page => {
-                    if (page.title.rendered === 'About me') {
-                        setAbouPage(page)
-                    }
-                    if (page.title.rendered === 'cv') {
-                        setCvPage(page)
-                    }
-                })
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(page => {
+                        if (page.title.rendered === 'About me') {
+                            setAbouPage(page)
+                        }
+                        if (page.title.rendered === 'cv') {
+                            setCvPage(page)
+                        }
+                    })
 
-            })
+                })
         }
         fetchData()
     }, [])
 
-    return(
+    return (
         <main
             className={styles.about}
         >
             <div className={styles.about__wrapper}>
                 {aboutPage && (
                     <div className={styles.about_about}>
-                        <motion.p
-                            initial={{opacity: 0, x: -20}}
-                            animate={{opacity: 1, x: 0}}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
                             transition={transition}
                             className={styles.about_about_description}
-                        >
-                            {aboutPage.acf.description}
-                        </motion.p>
+                            dangerouslySetInnerHTML={{ __html: aboutPage.acf.description }} />
                     </div>
                 )}
-                
+
                 {aboutPage && (
                     <Friends aboutPage={aboutPage} />
                 )}
@@ -64,79 +62,66 @@ const AboutPage = () => {
             {cvPage && (
                 <Marquee cvPage={cvPage} />
             )}
-            
+
 
 
         </main>
     )
 }
 
-const Marquee = ({cvPage}) => {
+const Marquee = ({ cvPage }) => {
 
     const [skills, setSkills] = useState([])
-    const swiperRef = useRef();
 
     useEffect(() => {
         let s = cvPage.acf.skills.replaceAll('<p>', '')
         s = s.replaceAll('</p>', '')
-        
-        setSkills(s.split('\n'))
 
-        if (swiperRef) {
-            swiperRef.current.children[0].style.transitionTimingFunction = 'linear'
-        }
+        setSkills(s.split('\n'))
 
     }, [])
 
 
-    return(
+    return (
         <motion.div
-            initial={{opacity: 0, y: 20}}
-            animate={{opacity: 1, y: 0}}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={transitionMarquee}
+            className={styles.about__marquee}
         >
-            <Swiper
-                ref={swiperRef}
-                slidesPerView='auto'
-                autoplay={{
-                    delay: 1,
-                    disableOnInteraction: false,
-                }}
-                loop={true}
-                speed={3000}
-                freeModeMomentum={false}
-                freeMode={true}
-                mousewheel={false}
-                modules={[Autoplay, Mousewheel, FreeMode]}
-                className={styles.about__marquee}
-            >
-                {
-                    skills.map((skill, index) => (
-                        <SwiperSlide
-                            className={styles.about__marquee__slide}
-                            key={index}
-                        >
-                            <p >{skill} / </p>
-                        </SwiperSlide>
-                    ))
-                }
-            </Swiper>
+            <div className={styles.about__marquee__content}>
+                <span className={styles.about__marquee__content__1}>
+                    {skills.map((skill, index) => (
+                        <span key={index} className={styles.about__marquee__content__skill}>
+                            {skill}
+                        </span>
+                    ))}
+                </span>
+                <span className={styles.about__marquee__content__2}>
+                    {skills.map((skill, index) => (
+                        <span key={index} className={styles.about__marquee__content__skill}>
+                            {skill}
+                        </span>
+                    ))}
+                </span>
+            </div>
+
         </motion.div>
     )
 }
 
-const Friends = ({aboutPage}) => {
+const Friends = ({ aboutPage }) => {
 
-    return(
+    return (
         <motion.div
             className={styles.about__friends}
-            initial={{opacity: 0, x: 20}}
-            animate={{opacity: 1, x: 0}}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={transitionFriends}
         >
             <h3>FRIENDS</h3>
-    
-            <div dangerouslySetInnerHTML={{__html: aboutPage.acf.friends}} />
+
+            <div dangerouslySetInnerHTML={{ __html: aboutPage.acf.friends }} />
         </motion.div>
     )
 }
