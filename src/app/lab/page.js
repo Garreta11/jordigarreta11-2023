@@ -110,43 +110,20 @@ const LabItem = ({ experiment, index }) => {
 const Experiment = ({ experiment }) => {
     const fileType = experiment.acf.file.type
 
-    const [isPlaying, setIsPlaying] = useState(false);
     const videoRef = useRef(null);
-
-    const handleMouseOver = () => {
-        if (videoRef.current) {
-            videoRef.current.play();
-            setIsPlaying(true);
-        }
-    };
-
-    const handleMouseLeave = () => {
-        if (videoRef.current) {
-            videoRef.current.pause();
-            setIsPlaying(false);
-        }
-    };
+    const isInView = useInView(videoRef, { once: false })
 
     useEffect(() => {
-        const handleResize = () => {
-            const autoPlayValue = window.innerWidth < 921;
+        if (isInView) {
             if (videoRef.current) {
-                videoRef.current.autoplay = autoPlayValue;
-                setIsPlaying(autoPlayValue);
+                videoRef.current.play()
             }
-        };
-
-        // Initial setup
-        handleResize();
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+        } else {
+            if (videoRef.current) {
+                videoRef.current.pause()
+            }
+        }
+    }, [isInView])
 
     return (
         <>
@@ -157,10 +134,8 @@ const Experiment = ({ experiment }) => {
                     src={experiment.acf.file.url}
                     loop
                     muted
-                    autoPlay={window.innerWidth < 921}
+                    autoPlay={false}
                     playsInline={true}
-                    onMouseOver={handleMouseOver}
-                    onMouseLeave={handleMouseLeave}
                 >
                     <source src={experiment.acf.file.url} type="video/mp4" />
                 </video>
