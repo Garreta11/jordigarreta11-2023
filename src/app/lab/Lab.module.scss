@@ -1,68 +1,11 @@
 @use '../_styles/breakpoints.scss' as *;
 
-.labpage {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-
-  cursor: url('/svg/my-experiments.svg'), auto;
-
-  &_tech {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    font-size: var(--font-size-big);
-    z-index: 10000;
-    transform: translate(-50%, -50%);
-
-    mix-blend-mode: difference;
-
-    text-transform: uppercase;
-    text-align: center;
-
-    pointer-events: none;
-
-  }
-}
-
-.swiperslide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 100%;
-  width: auto;
-}
-
-.experiment {
-
-  &_videoElement {
-    position: relative;
-    transition: all ease 0.5s;
-    z-index: 0;
-    box-shadow: 0px;
-    object-fit: cover;
-
-    height: 100vh;
-    width: auto;
-
-    @include sm {
-      opacity: 1;
-    }
-
-  }
-}
-
-.swiper-wrapper {
-  transition-timing-function: linear !important;
-}
-
-
-// ============================================
-
 .lab {
   padding: 150px 0px;
   &__items {
+    &__container {
+      width: 100%;
+    }
     &__item {
       display: flex;
       align-items: flex-end;
