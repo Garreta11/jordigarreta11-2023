@@ -1,0 +1,46 @@
+@use '../_styles/breakpoints.scss' as *;
+
+.cv {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 150px;
+  padding-bottom: 150px;
+  min-height: 100vh;
+  padding-left: var(--padding-page);
+  padding-right: var(--padding-page);
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    @include sm {
+      grid-template-columns: 1fr;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    a {
+      border-bottom: 1px solid white;
+    }
+  }
+
+  &__section {
+    margin-bottom: 30px;
+    font-size: 1em;
+    width: 70%;
+    font-weight: 300;
+
+    &__skills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+  }
+
+}
