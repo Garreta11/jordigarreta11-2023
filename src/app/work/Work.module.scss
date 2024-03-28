@@ -75,11 +75,18 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       z-index: 1;
       background-color: var(--jgd--black);
 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      
 
       transition: all ease 1s;
+      
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        text-align: center;
+        flex-direction: column;
+        gap: 5px;
+      }
 
       &_open {
         opacity: 1;
@@ -111,6 +118,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
         justify-content: center;
         text-transform: uppercase;
         font-size: var(--font-size-big);
+        margin-bottom: 30px;
       }
 
       &_title {
@@ -125,6 +133,17 @@ $animationfadein: fadein ease 0.5s forwards 2s;
 
       &_all {
         margin-bottom: 50px;
+      }
+
+      &_category {
+        font-size: var(--font-size-xsmaller);
+        width: fit-content;
+        background-color: transparent;
+        text-transform: lowercase;
+        font-weight: 300;
+        &:hover {
+          font-weight: 800;
+        }
       }
     }
   }
@@ -168,8 +187,15 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       }
     }
 
-    &_categories {
-      font-size: 1em;
+    &_category {
+      font-size: var(--font-size-xsmaller);
+      width: fit-content;
+      background-color: transparent;
+      text-transform: lowercase;
+      font-weight: 300;
+      &:hover {
+        font-weight: 800;
+      }
     }
     
     &_button {
