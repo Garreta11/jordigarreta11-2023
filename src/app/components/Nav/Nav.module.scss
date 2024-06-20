@@ -19,6 +19,8 @@
 
     pointer-events: none;
 
+    mix-blend-mode: difference;
+
     &__header {
         display: flex;
         width: 100%;

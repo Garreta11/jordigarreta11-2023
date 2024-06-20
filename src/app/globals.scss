@@ -34,8 +34,6 @@
   margin: 0;
   font-family: $fontwebsite;
 
-  line-height: 1;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -92,4 +90,11 @@ button {
 .hide {
   opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+#awwwards {
+  @include sm {
+    transform: translateY(-50%) scale(0.7) !important;
+    right: -10px !important;
+  }
 }
