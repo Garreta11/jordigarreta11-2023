@@ -54,6 +54,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     align-items: center;
     // pointer-events: none;
     flex-direction: column;
+    mix-blend-mode: difference;
     &__wrapper {
       width: fit-content;
       cursor: pointer;
