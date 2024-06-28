@@ -1,48 +1,36 @@
 'use client';
-
+import Sketch from './module';
 import Link from 'next/link';
+import Image from 'next/image';
+import gsap from 'gsap';
+
+import { useRouter } from 'next/navigation';
 
 // css
 import styles from './Work.module.scss';
 
 // react
-import { useEffect, useState, useRef, Suspense } from 'react';
-
-// react three fiber / drei
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import {
-  ScrollControls,
-  Plane,
-  useTexture,
-  useScroll,
-  Environment,
-} from '@react-three/drei';
-
-// gsap
-import gsap from 'gsap';
-
-import { motion } from 'framer-motion';
-
-// loader
-import Loader from '../components/Loader/Loader';
-
-const DISTANCE = 20;
-
-const transitionSwipe = {
-  duration: 1,
-  delay: 3,
-  ease: [0.43, 0.13, 0.23, 0.96],
-};
+import { useEffect, useState, useRef } from 'react';
 
 // WorkPage
 const WorkPage = () => {
-  const [projects, setProjects] = useState();
-  const [projectTitle, setProjectTitle] = useState();
-  const [projectCat, setProjectCat] = useState();
-  const [projectSlug, setProjectSlug] = useState();
-  const [isListOpen, setIsListOpen] = useState(false);
+  const [projects, setProjects] = useState(null);
 
-  const swipeRef = useRef();
+  const [state, setState] = useState('horizontal');
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [url, setUrl] = useState('');
+  const [list, setList] = useState(false);
+
+  const sceneRef = useRef();
+  const router = useRouter();
+  const stateRef = useRef(state);
+  const sketchRef = useRef();
+
+  // Sync state with ref
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   useEffect(() => {
     async function fetchData() {
@@ -54,285 +42,371 @@ const WorkPage = () => {
           setProjects(data);
         });
     }
+
     fetchData();
   }, []);
 
-  const sendIndex = (index) => {
-    projects.forEach((project, i) => {
-      if (i === index) {
-        const parser = new DOMParser();
-        const parsedEntity = parser.parseFromString(
-          project.title.rendered,
-          'text/html'
-        );
-        const t = parsedEntity.documentElement.textContent;
-        setProjectTitle(t);
-        setProjectCat(project.acf.category);
-        setProjectSlug(project.slug);
-      }
+  useEffect(() => {
+    if (!projects) return;
+
+    let sketch = new Sketch({
+      dom: sceneRef.current,
+      router: router,
     });
+
+    sketchRef.current = sketch;
+
+    let speed = 0;
+    let position = 0;
+    let rounded = 0;
+
+    let objs = Array(projects.length).fill({ dist: 0 });
+
+    let block = document.getElementById('block');
+    let wrap = document.getElementById('wrap');
+    let elems = [...document.querySelectorAll('.n')];
+
+    const handleWheel = (e) => {
+      speed += e.deltaY * 0.0003;
+    };
+
+    let touchStartY = 0;
+    let touchMoveY = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      touchMoveY = e.touches[0].clientY;
+      let touchDelta = touchStartY - touchMoveY;
+      speed += touchDelta * 0.0003;
+      touchStartY = touchMoveY;
+    };
+
+    function raf() {
+      position += speed;
+      speed *= 0.8;
+
+      // Clamp position so we don't have infinite scroll
+      position = Math.min(Math.max(position, 0), objs.length - 1);
+
+      rounded = Math.round(position);
+      let diff = rounded - position;
+
+      position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.015;
+
+      const currentState = stateRef.current;
+
+      if (currentState === 'vertical') {
+        objs.forEach((o, i) => {
+          o.dist = Math.min(Math.abs(position - i), 1);
+          o.dist = 1 - o.dist ** 2;
+
+          // div elements
+          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+
+          // webgl elements
+          let scale = 0.3 + 1 * o.dist;
+          gsap.to(sketch.meshes[i].scale, {
+            x: scale,
+            y: scale,
+            z: scale,
+          });
+
+          gsap.to(sketch.meshes[i].position, {
+            x: 0,
+            y: i * 1.2 - position * 1.2,
+            z: 0,
+          });
+
+          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+        });
+        wrap.style.transform = `translate(0, ${-position * 50 + 25}px)`;
+      } else if (currentState === 'horizontal') {
+        objs.forEach((o, i) => {
+          o.dist = Math.min(Math.abs(position - i), 1);
+          o.dist = 1 - o.dist ** 2;
+
+          // div elements
+          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+
+          // webgl elements
+          let scale = 0.3 + 1 * o.dist;
+
+          gsap.to(sketch.meshes[i].scale, {
+            x: scale,
+            y: scale,
+            z: scale,
+          });
+
+          gsap.to(sketch.meshes[i].position, {
+            x: i * 1.7 - position * 1.7,
+            y: 0,
+            z: 0,
+          });
+
+          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+        });
+        wrap.style.transform = `translate(${-position * 50 + 25}px, 0)`;
+      } else if (currentState === 'circle') {
+        let radius = 1.5;
+        let scale = 1;
+        let initScale = 0.1;
+
+        objs.forEach((o, i) => {
+          o.dist = Math.min(Math.abs(position - i), 1);
+          o.dist = 1 - o.dist ** 2;
+
+          // Circle Slider
+          let angle = ((i - position) / objs.length) * Math.PI * 2;
+
+          gsap.to(sketch.meshes[i].position, {
+            x: radius * Math.cos(angle + Math.PI / 2),
+            y: radius * Math.sin(angle + Math.PI / 2) - o.dist * 1.5,
+            z: o.dist,
+          });
+
+          gsap.to(sketch.meshes[i].scale, {
+            x: initScale + scale * o.dist,
+            y: initScale + scale * o.dist,
+            z: initScale + scale * o.dist,
+          });
+
+          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+        });
+      } else if (currentState === 'depth') {
+        objs.forEach((o, i) => {
+          o.dist = Math.min(Math.abs(position - i), 1);
+          o.dist = 1 - o.dist ** 2;
+
+          // div elements
+          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+
+          // webgl elements
+          // let scale = 0.3 + 1 * o.dist;
+          let scale = 1 + 0.5 * o.dist;
+
+          gsap.to(sketch.meshes[i].scale, {
+            x: scale,
+            y: scale,
+            z: scale,
+          });
+
+          gsap.to(sketch.meshes[i].position, {
+            x: i * 0.5 - position * 0.5,
+            y: -1 + (i * 0.5 - position * 0.5) + o.dist * 1,
+            z: -i * 0.2 + position * 0.2,
+          });
+
+          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+        });
+        wrap.style.transform = `translate(${-position * 50 + 25}px, 0)`;
+      }
+
+      // Set Title Project
+      const parser = new DOMParser();
+      const parsedEntity = parser.parseFromString(
+        projects[Math.round(position)].title.rendered,
+        'text/html'
+      );
+      const t = parsedEntity.documentElement.textContent;
+      setTitle(t);
+
+      // Set Category Project
+      const parsedEntityCategory = parser.parseFromString(
+        projects[Math.round(position)].acf.category,
+        'text/html'
+      );
+      const c = parsedEntityCategory.documentElement.textContent;
+      setCategory(c);
+
+      // Set URL Project
+      const parsedEntityUrl = parser.parseFromString(
+        projects[Math.round(position)].slug,
+        'text/html'
+      );
+      const u = parsedEntityUrl.documentElement.textContent;
+      setUrl(`/work/${u}`);
+
+      window.requestAnimationFrame(raf);
+    }
+
+    raf();
+
+    window.addEventListener('wheel', handleWheel);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+    // Cleanup function
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [projects]);
+
+  const handleMode = (e, _mode) => {
+    const settingsMode = document.querySelectorAll('.settings-mode');
+    settingsMode.forEach((s, i) => {
+      s.classList.remove('mode-selected');
+    });
+
+    const settingsSelected = e.target;
+    settingsSelected.classList.add('mode-selected');
+
+    setState(_mode);
   };
-  const handleClickList = () => {
-    const b = isListOpen;
-    setIsListOpen(!b);
+
+  const handleList = () => {
+    setList(!list);
   };
 
   return (
-    <main
-      className={`${
-        isListOpen
-          ? `${styles.main} ${styles.main_open}`
-          : `${styles.main} ${styles.main_close}`
-      }`}
-    >
+    <main className={styles.main}>
+      <div id='wrap' className={styles.main__wrap}>
+        {projects?.map((project, i) => {
+          return (
+            <div
+              key={i}
+              className={`n ${styles.main__n} ${styles[`main__n__${i}`]}`}
+            >
+              <Image
+                className='gallery-images'
+                src={`${project.acf.video.preview.url}`}
+                alt={String(i)}
+                width={800}
+                height={800 / 1.5}
+                data-url={`/work/${project.slug}`}
+                data-name={project.slug}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={styles.main__canvas} ref={sceneRef}></div>
+
+      <div className={styles.main__info}>
+        <Link href={url} className={styles.main__info__wrapper}>
+          <p className={styles.main__info__title}>{title}</p>
+          <p className={styles.main__info__category}>{category}</p>
+        </Link>
+      </div>
+
       {projects && (
         <>
+          <div className={styles.main__burger} onClick={handleList}>
+            <Image
+              src={list ? './svg/close.svg' : './svg/burger.svg'}
+              width={25}
+              height={14}
+              alt='burger'
+            />
+          </div>
+
           <div
-            className={`${
-              isListOpen
-                ? `${styles.main_list_container} ${styles.main_list_container_open}`
-                : `${styles.main_list_container} ${styles.main_list_container_close}`
+            className={`${styles.main__list} ${
+              list ? styles.main__list__open : styles.main__list__close
             }`}
           >
-            <div className={styles.main_list_container_group}>
-              {projects.map((project, index) => {
-                const parser = new DOMParser();
-                const parsedEntity = parser.parseFromString(
-                  project.title.rendered,
-                  'text/html'
-                );
-                const t = parsedEntity.documentElement.textContent;
-                return (
-                  <div
-                    key={index}
-                    className={styles.main_list_container_element}
-                  >
-                    <Link href={`/work/${project.slug}`}>
-                      <p className={styles.main_list_container_title}>{t}</p>
-                      {project.acf.category && (
-                        <p className={styles.main_list_container_category}>
-                          {project.acf.category}
+            <div className={styles.main__list__container}>
+              <div className={styles.main__list__container__header}>
+                <h3>Projects</h3>
+                <h3>{projects.length}</h3>
+              </div>
+              <div>
+                {projects.map((project, index) => {
+                  const parser = new DOMParser();
+                  const parsedEntity = parser.parseFromString(
+                    project.title.rendered,
+                    'text/html'
+                  );
+                  const t = parsedEntity.documentElement.textContent;
+                  return (
+                    <div
+                      key={index}
+                      className={styles.main__list__container__element}
+                    >
+                      <Link href={`/work/${project.slug}`}>
+                        <p
+                          className={
+                            styles.main__list__container__element__title
+                          }
+                        >
+                          {t}
                         </p>
-                      )}
-                    </Link>
-                  </div>
-                );
-              })}
+                        {project.acf.category && (
+                          <p
+                            className={
+                              styles.main__list__container__element__category
+                            }
+                          >
+                            {project.acf.category}
+                          </p>
+                        )}
+
+                        <Image
+                          className={
+                            styles.main__list__container__element__image
+                          }
+                          src={`${project.acf.video.preview.url}`}
+                          alt={String(index)}
+                          width={200}
+                          height={200 / 1.5}
+                        />
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className={styles.main_list}>
-            <svg
-              className={styles.main_list_icon}
-              onClick={handleClickList}
-              width='420'
-              height='420'
-              viewBox='0 0 420 420'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              {isListOpen ? (
-                <>
-                  <path
-                    d='M144.968 267.52L267.597 144.89'
-                    stroke='white'
-                    strokeWidth='17.3859'
-                    strokeLinecap='square'
-                  />
-                  <path
-                    d='M151.422 144.89L274.051 267.52'
-                    stroke='white'
-                    strokeWidth='17.3859'
-                    strokeLinecap='square'
-                  />
-                </>
-              ) : (
-                <>
-                  <path
-                    d='M123.156 250.678H297.408'
-                    stroke='white'
-                    strokeWidth='17.4689'
-                    strokeLinecap='square'
-                  />
-                  <path
-                    d='M123.156 161.15H297.408'
-                    stroke='white'
-                    strokeWidth='17.4689'
-                    strokeLinecap='square'
-                  />
-                  <path
-                    d='M123.156 205.696H297.408'
-                    stroke='white'
-                    strokeWidth='17.4689'
-                    strokeLinecap='square'
-                  />
-                </>
-              )}
-            </svg>
+          <div className={styles.main__settings}>
+            <ul className={styles.main__settings__list}>
+              <li onClick={(e) => handleMode(e, 'horizontal')}>
+                <Image
+                  className='settings-mode mode-selected'
+                  src='./svg/horizontal.svg'
+                  width={24}
+                  height={24}
+                  alt='horizontal'
+                />
+              </li>
+              <li onClick={(e) => handleMode(e, 'vertical')}>
+                <Image
+                  className='settings-mode'
+                  src='./svg/vertical.svg'
+                  width={24}
+                  height={24}
+                  alt='vertical'
+                />
+              </li>
+              <li onClick={(e) => handleMode(e, 'circle')}>
+                <Image
+                  className='settings-mode'
+                  src='./svg/rounded.svg'
+                  width={24}
+                  height={24}
+                  alt='circle'
+                />
+              </li>
+              <li onClick={(e) => handleMode(e, 'depth')}>
+                <Image
+                  className='settings-mode'
+                  src='./svg/depth.svg'
+                  width={24}
+                  height={24}
+                  alt='depth'
+                />
+              </li>
+            </ul>
           </div>
-
-          <Canvas linear flat shadows className={styles.main_canvas}>
-            <Suspense fallback={<Loader />}>
-              <Scene
-                sendIndex={sendIndex}
-                projects={projects}
-                swipeEl={swipeRef}
-              />
-            </Suspense>
-          </Canvas>
-
-          <div className={styles.main_info}>
-            <Link
-              className={styles.main_info_title}
-              href={`/work/${projectSlug}`}
-            >
-              {projectTitle}
-              <p className={styles.main_info_category}>{projectCat}</p>
-            </Link>
-          </div>
-
-          <motion.div className={styles.main_swipe_text} ref={swipeRef}>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={transitionSwipe}
-            >
-              Swipe up
-            </motion.p>
-          </motion.div>
         </>
       )}
+
+      <div id='block' className={styles.main__block} />
     </main>
   );
 };
-
-// Scene
-const Scene = ({ sendIndex, projects, swipeEl }) => {
-  const getIndex = (index) => {
-    sendIndex(index);
-  };
-
-  return (
-    <>
-      {/* <OrbitControls /> */}
-      <Environment files='./hdri/warehouse.exr' />
-      <ambientLight intensity={1} />
-      <directionalLight
-        castShadow
-        position={[1, 1, 1]}
-        intensity={1}
-        shadow-mapSize-height={1024}
-        shadow-mapSize-width={1024}
-      />
-      <directionalLight
-        castShadow
-        position={[-1, -1, -1]}
-        intensity={1}
-        shadow-mapSize-height={1024}
-        shadow-mapSize-width={1024}
-      />
-
-      {/* <fog attach="fog" color="white" near={1} far={DISTANCE + 10} /> */}
-
-      <Suspense fallback={null}>
-        <ScrollControls
-          damping={0.1}
-          pages={projects.length}
-          distance={1}
-          infinite
-        >
-          <Projects getIndex={getIndex} projects={projects} swipeEl={swipeEl} />
-        </ScrollControls>
-      </Suspense>
-    </>
-  );
-};
-
-// All Projects
-const Projects = ({ getIndex, projects, swipeEl }) => {
-  const projectsRef = useRef();
-  const scroll = useScroll();
-  const { camera, mouse } = useThree();
-  const [index, setIndex] = useState(0);
-
-  let oldscrolloffset = scroll.offset;
-
-  useEffect(() => {
-    getIndex(index);
-  }, [index]);
-
-  useFrame(() => {
-    // move projects
-    const moveZ =
-      scroll.scroll.current * projectsRef.current.children.length * DISTANCE;
-    projectsRef.current.position.set(0, 0, moveZ);
-
-    const i = Math.floor(1 + moveZ / DISTANCE - 0.25);
-    setIndex(i);
-
-    // camera rotation
-    const speed = window.innerWidth < 921 ? 0.1 : 0.9;
-    gsap.to(camera.rotation, {
-      x: mouse.y * speed,
-      y: -mouse.x * speed,
-      z: 0,
-    });
-
-    // hide swipe up
-    if (oldscrolloffset != scroll.offset) {
-      swipeEl.current.classList.add('hide');
-    }
-    oldscrolloffset = scroll.offset;
-  });
-
-  return (
-    <group ref={projectsRef} position={[0, -1.5, 0]}>
-      {projects.map((project, index) => {
-        return <Project key={index} project={project} index={index} />;
-      })}
-    </group>
-  );
-};
-
-// Project
-const Project = ({ project, index }) => {
-  const [preview, setPreview] = useState('');
-
-  useEffect(() => {
-    setPreview(project.acf.video.preview.url);
-  }, [project]);
-
-  return (
-    <group position={[0, 0, -index * DISTANCE]}>
-      {preview && (
-        <>
-          <Plane receiveShadow args={[3, 3]} position={[0, 0, 0]}>
-            <PreviewMaterial url={preview} />
-          </Plane>
-        </>
-      )}
-    </group>
-  );
-};
-
-const PreviewMaterial = ({ url }) => {
-  const [texture, setTexture] = useState();
-  const _texture = useTexture(url);
-  useEffect(() => {
-    setTexture(_texture);
-  }, []);
-  return (
-    <>
-      {texture && (
-        <meshBasicMaterial
-          map={texture}
-          transparent
-          toneMapped={false}
-          opacity={1.0}
-        />
-      )}
-    </>
-  );
-};
-
 export default WorkPage;

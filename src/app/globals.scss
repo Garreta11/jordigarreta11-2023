@@ -6,7 +6,7 @@
   --color-one: #2f2f2f;
   --color-two: #fdfdfd;
 
-  --jgd--black: #000000;
+  --jgd--black: #080808;
   --jgd--white: #ffffff;
 
   --padding-page: 10px;
@@ -46,7 +46,7 @@ body {
   overflow-x: hidden;
 
   color: var(--jgd--white);
-  background-color: var(--jgd--black);
+  // background-color: var(--jgd--black);
 
   transition: background-color ease 1s, color ease 1s;
 
@@ -90,6 +90,11 @@ button {
 .hide {
   opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+.mode-selected {
+  opacity: 1 !important;
+  transform: scale(1.5);
 }
 
 #awwwards {

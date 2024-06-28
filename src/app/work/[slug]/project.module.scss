@@ -3,12 +3,13 @@
 .project {
     width: 100vw;
     position: relative;
-    top: 100px;
-    padding-top: 50px;
+    padding-top: 150px;
     padding-bottom: 150px;
     padding-left: var(--padding-page);
     padding-right: var(--padding-page);
     overflow-y: scroll;
+
+    background-color: var(--jgd--black);
 
     cursor: url('/svg/project.svg'), auto;
 

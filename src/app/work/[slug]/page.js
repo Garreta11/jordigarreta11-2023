@@ -46,8 +46,6 @@ const ProjectPage = ({ params }) => {
 
               setProjectTitle(t);
 
-              console.log(d);
-
               if (d.next !== null) {
                 setNextProject(d.next.slug);
               } else {
