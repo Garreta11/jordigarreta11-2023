@@ -82,6 +82,7 @@ const WorkPage = () => {
       let touchDelta = touchStartY - touchMoveY;
       speed += touchDelta * 0.003;
       touchStartY = touchMoveY;
+      e.preventDefault(); // Prevents the default touch behavior
     };
 
     function raf() {
