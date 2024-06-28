@@ -50,6 +50,10 @@ body {
 
   transition: background-color ease 1s, color ease 1s;
 
+  @include sm {
+    overscroll-behavior: none;
+  }
+
   a {
     color: var(--jgd--white);
     text-decoration: none;

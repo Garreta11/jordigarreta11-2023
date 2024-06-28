@@ -17,6 +17,9 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     position: absolute;
     top: 0px;
     display: none;
+    @include sm {
+      touch-action: none; /* Prevents the default touch action */
+    }
   }
 
   &__n {
