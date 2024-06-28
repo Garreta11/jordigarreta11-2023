@@ -44,7 +44,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
   }
 
   &__info {
-    position: absolute;
+    position: fixed;
     width: 100vw;
     height: 100vh;
     top: 0;

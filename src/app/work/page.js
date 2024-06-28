@@ -80,7 +80,7 @@ const WorkPage = () => {
     const handleTouchMove = (e) => {
       touchMoveY = e.touches[0].clientY;
       let touchDelta = touchStartY - touchMoveY;
-      speed += touchDelta * 0.0003;
+      speed += touchDelta * 0.003;
       touchStartY = touchMoveY;
     };
 
