@@ -3,6 +3,7 @@ import Link from 'next/link';
 import styles from './project.module.scss';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import TextReveal from '@/app/components/TextReveal/TextReveal';
 
 const transitionTitle = {
   duration: 1,
@@ -79,11 +80,12 @@ const ProjectPage = ({ params }) => {
           <div className={styles.project_info}>
             <motion.div
               className={styles.project_info_description}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={transitionDescription}
             >
-              <p>{project.acf.description}</p>
+              {/* <p>{project.acf.description}</p> */}
+              <TextReveal text={project.acf.description} />
               <div
                 className={styles.project_images}
                 dangerouslySetInnerHTML={{ __html: project.content.rendered }}

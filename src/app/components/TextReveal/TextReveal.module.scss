@@ -1,0 +1,11 @@
+@use '../../_styles/breakpoints.scss' as *;
+
+.textreveal {
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  @include sm {
+    width: 95%;
+  }
+}

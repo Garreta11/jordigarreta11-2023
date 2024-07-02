@@ -119,11 +119,13 @@
     &_images {
         columns: 1;
         column-gap: 10px;
-
+        
         figure {
             width: 100%;
             margin-bottom: 10px;
             img, video {
+
+
                 object-fit: cover;
                 width: 100%;
                 height: auto;
@@ -132,10 +134,13 @@
     }
 
     &_link {
+        border: 1px solid var(--jgd--white);
+        padding: 10px 20px;
+        color: var(--jgd--white);
         text-transform: uppercase;
-        font-size: var(--font-size-big);
         &:hover {
-            font-weight: 800;
+            color: var(--jgd--black);
+            background-color: var(--jgd--white);
         }
     }
 
