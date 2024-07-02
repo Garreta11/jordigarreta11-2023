@@ -3,6 +3,7 @@ import Sketch from './module';
 import Link from 'next/link';
 import Image from 'next/image';
 import gsap from 'gsap';
+import * as THREE from 'three';
 
 import { useRouter } from 'next/navigation';
 
@@ -26,6 +27,7 @@ const WorkPage = () => {
   const router = useRouter();
   const stateRef = useRef(state);
   const sketchRef = useRef();
+  const infoRef = useRef();
 
   // Sync state with ref
   useEffect(() => {
@@ -62,7 +64,6 @@ const WorkPage = () => {
 
     let objs = Array(projects.length).fill({ dist: 0 });
 
-    let block = document.getElementById('block');
     let wrap = document.getElementById('wrap');
     let elems = [...document.querySelectorAll('.n')];
 
@@ -83,6 +84,25 @@ const WorkPage = () => {
       speed += touchDelta * 0.003;
       touchStartY = touchMoveY;
       e.preventDefault(); // Prevents the default touch behavior
+    };
+
+    const handleMouseMove = (e) => {
+      const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      // Update camera position based on mouse coordinates
+      sketchRef.current.camera.position.x = mouseX * 1; // adjust multiplier as needed
+      sketchRef.current.camera.position.y = mouseY * 1; // adjust multiplier as needed
+
+      // Make the camera look at the center of the scene
+      sketchRef.current.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+      // Update info position
+      // Update div position
+      if (infoRef.current) {
+        infoRef.current.style.left = `${mouseX * 10}px`;
+        infoRef.current.style.top = `${mouseY * 10}px`;
+      }
     };
 
     function raf() {
@@ -238,11 +258,13 @@ const WorkPage = () => {
     window.addEventListener('wheel', handleWheel);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('mousemove', handleMouseMove);
     // Cleanup function
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [projects]);
 
@@ -288,10 +310,13 @@ const WorkPage = () => {
       <div className={styles.main__canvas} ref={sceneRef}></div>
 
       <div className={styles.main__info}>
-        <Link href={url} className={styles.main__info__wrapper}>
+        <div ref={infoRef} className={styles.main__info__wrapper}>
           <p className={styles.main__info__title}>{title}</p>
           <p className={styles.main__info__category}>{category}</p>
-        </Link>
+          <Link href={url} className={styles.main__info__link}>
+            View project
+          </Link>
+        </div>
       </div>
 
       {projects && (

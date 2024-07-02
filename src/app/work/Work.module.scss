@@ -60,8 +60,9 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     mix-blend-mode: difference;
     &__wrapper {
       width: fit-content;
-      cursor: pointer;
       padding: 0px var(--padding-page);
+      text-align: center;
+      position: relative;
     }
     &__title {
       mix-blend-mode: difference;
@@ -74,8 +75,19 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       text-transform: uppercase;
       text-align: center;
       mix-blend-mode: difference;
-      font-size: var(--font-size-small);
+      font-size: var(--font-size-xsmall);
       animation: fade ease 5s forwards;
+      margin-bottom: 30px;
+    }
+    &__link {
+      border: 1px solid var(--jgd--white);
+      padding: 10px 20px;
+      color: var(--jgd--white);
+      text-transform: uppercase;
+      &:hover {
+        color: var(--jgd--black);
+        background-color: var(--jgd--white);
+      }
     }
   }
 
