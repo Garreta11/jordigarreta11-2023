@@ -53,6 +53,20 @@ const AboutPage = () => {
 
         {aboutPage && <Friends aboutPage={aboutPage} />}
       </div>
+
+      {aboutPage && (
+        <div className={styles.about_achievements}>
+          <h3 className={styles.about_achievements_title}>Achievements</h3>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={transition}
+            className={styles.about_achievements_text}
+            dangerouslySetInnerHTML={{ __html: aboutPage.acf.achievements }}
+          />
+        </div>
+      )}
+
       {cvPage && <Marquee cvPage={cvPage} />}
     </main>
   );

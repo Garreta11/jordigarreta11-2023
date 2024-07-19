@@ -153,6 +153,59 @@
       }
     }
   }
+
+  &_achievements {
+    text-align: left;
+    margin-bottom: 100px;
+    &_title {
+      margin-bottom: 20px;
+    }
+    &_text {
+      display: flex;
+      flex-direction: column;
+      font-size: var(--font-size-small);
+      @include sm {
+        font-size: var(--font-size-smaller);
+      }
+      div {
+        border-top: 1px solid var(--jgd--white);
+        border-bottom: 1px solid var(--jgd--white);
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0px;
+        transition: all .5s ease;
+        
+        &:hover {
+          padding: 20px 10px 20px 30px;
+          background-color: var(--jgd--white);
+          * {
+            color: var(--jgd--black);
+          }
+        }
+
+        &:last-child {
+          border-top: none;
+        }
+        div {
+          padding: 0px;
+          width: calc(100% / 3);
+          border-bottom: none;
+          border-top: none;
+          &:hover {
+            padding: 0px;
+            background-color: transparent;
+          }
+          &:last-child {
+            text-align: right;
+            * {
+              text-align: right;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 /* Transition */
