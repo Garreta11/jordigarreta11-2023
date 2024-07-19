@@ -22,7 +22,7 @@ export default function Home() {
 
       {videoLoad && <Particles zoom={zoomParticles} />}
 
-      <div
+      {/* <div
         id='awwwards'
         style={{
           position: 'fixed',
@@ -45,7 +45,7 @@ export default function Home() {
             </g>
           </svg>
         </a>
-      </div>
+      </div> */}
     </motion.main>
   );
 }
