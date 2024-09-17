@@ -448,7 +448,7 @@ export default class Output {
 
     this.mesh = new THREE.Points(this.geometry, this.material); */
 
-    this.geometryInstanced = new THREE.SphereGeometry(0.03, 20, 20);
+    this.geometryInstanced = new THREE.SphereGeometry(0.02, 20, 20);
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
