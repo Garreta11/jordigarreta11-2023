@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import Particles from './components/Particles/Particles';
 
 import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo';
+import GPGPUParticles from './components/GPGPUParticles/GPGPUParticles';
 
 export default function Home() {
   const [zoomParticles, setZoomParticles] = useState(false);
@@ -20,7 +21,8 @@ export default function Home() {
     <motion.main className={styles.main}>
       <BackgroundVideo videoLoaded={videoLoaded} />
 
-      {videoLoad && <Particles zoom={zoomParticles} />}
+      {/* {videoLoad && <Particles zoom={zoomParticles} />} */}
+      {videoLoad && <GPGPUParticles />}
 
       {/* <div
         id='awwwards'
