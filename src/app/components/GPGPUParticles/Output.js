@@ -67,7 +67,7 @@ export default class Output {
 
     this.time = 0;
     this._position = new THREE.Vector3();
-    this.setupSettigs();
+    // this.setupSettigs();
     Promise.all([this.loader.loadAsync('./models/jordi.glb')]).then(
       ([model]) => {
         this.suzanne = model.scene.children[0];
