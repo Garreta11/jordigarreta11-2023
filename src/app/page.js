@@ -21,11 +21,7 @@ export default function Home() {
   return (
     <motion.main className={styles.main}>
       <BackgroundVideo videoLoaded={videoLoaded} />
-
-      {/* Conditional rendering based on device type */}
-      {videoLoad && isMobile && <Particles zoom={zoomParticles} />}
-      {videoLoad && isTablet && <Particles zoom={zoomParticles} />}
-      {videoLoad && isDesktop && <GPGPUParticles />}
+      <Particles zoom={zoomParticles} />
     </motion.main>
   );
 }
