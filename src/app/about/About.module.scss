@@ -164,12 +164,15 @@
       display: flex;
       flex-direction: column;
       font-size: var(--font-size-small);
+      a, p {
+        width: 100%;
+      }
       @include sm {
         font-size: var(--font-size-smaller);
       }
       div {
         border-top: 1px solid var(--jgd--white);
-        border-bottom: 1px solid var(--jgd--white);
+        
         display: flex;
         justify-content: space-between;
         padding: 10px 0px;
@@ -184,7 +187,7 @@
         }
 
         &:last-child {
-          border-top: none;
+          border-bottom: 1px solid var(--jgd--white);
         }
         div {
           padding: 0px;
