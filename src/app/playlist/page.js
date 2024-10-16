@@ -68,8 +68,8 @@ const Playlist = () => {
         }
         // Circle Slider
         let radius = 1.5;
-        let scale = 1.5;
-        let initScale = 0.1;
+        let scale = 1.4;
+        let initScale = 0.2;
 
         objs.forEach((o, i) => {
           o.dist = Math.min(Math.abs(position - i), 1);
@@ -111,7 +111,7 @@ const Playlist = () => {
 
       raf();
 
-      let navs = Array.from(document.querySelectorAll('.item'));
+      let navs = Array.from(document.querySelectorAll('.item-playlist'));
       let list = document.querySelector('.list');
 
       navs.forEach((el, i) => {
