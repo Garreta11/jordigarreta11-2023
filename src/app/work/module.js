@@ -2,9 +2,6 @@ import * as THREE from 'three';
 import fragment from './shader/fragment.glsl';
 import vertex from './shader/vertex.glsl';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import gsap from 'gsap';
 
 export default class Sketch {
   constructor(options) {

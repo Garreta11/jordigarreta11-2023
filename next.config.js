@@ -10,7 +10,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['dashboard.jordigarreta.com'],
+    domains: ['dashboard.jordigarreta.com', 'i.scdn.co'],
   },
 };
 
