@@ -15,6 +15,7 @@
 
       @include sm {
         gap: 10px;
+        margin-bottom: 20px;
       }
 
       &:nth-child(8n-1),
@@ -56,10 +57,9 @@
         }
 
         &::before {
-          content: "";
+          content: '';
           display: block;
           width: 100%;
-
         }
       }
 

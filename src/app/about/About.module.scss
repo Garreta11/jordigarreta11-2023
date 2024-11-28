@@ -13,6 +13,11 @@
 
   cursor: url('/svg/contact-me.svg'), auto;
 
+  @include sm {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+
   /* cursor: url('/svg/scroll.svg'), auto; */
 
   &__wrapper {
@@ -96,7 +101,6 @@
         }
       }
     }
-
   }
 
   &__marquee {
@@ -119,9 +123,9 @@
 
       &__skill {
         display: inline-block;
-        padding: 0 50px;
+        padding: 0 20px;
 
-        font-size: var(--font-size-big);
+        font-size: var(--font-size-small);
         text-transform: uppercase;
       }
     }
@@ -157,6 +161,9 @@
   &_achievements {
     text-align: left;
     margin-bottom: 100px;
+    @include sm {
+      margin-bottom: 50px;
+    }
     &_title {
       margin-bottom: 20px;
     }
@@ -164,7 +171,8 @@
       display: flex;
       flex-direction: column;
       font-size: var(--font-size-small);
-      a, p {
+      a,
+      p {
         width: 100%;
       }
       @include sm {
@@ -172,12 +180,12 @@
       }
       div {
         border-top: 1px solid var(--jgd--white);
-        
+
         display: flex;
         justify-content: space-between;
         padding: 10px 0px;
-        transition: all .5s ease;
-        
+        transition: all 0.5s ease;
+
         &:hover {
           padding: 20px 10px 20px 30px;
           background-color: var(--jgd--white);
@@ -214,17 +222,15 @@
 /* Transition */
 @keyframes marquee {
   0% {
-    transform: translateX(0)
+    transform: translateX(0);
   }
 
   100% {
-    transform: translateX(-100%)
+    transform: translateX(-100%);
   }
 }
 
-
 @keyframes swap {
-
   0%,
   50% {
     left: 0%;
