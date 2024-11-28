@@ -16,6 +16,8 @@ import { useEffect, useState, useRef } from 'react';
 // WorkPage
 const WorkPage = () => {
   const [projects, setProjects] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const [state, setState] = useState('horizontal');
   const [title, setTitle] = useState('');
@@ -23,11 +25,15 @@ const WorkPage = () => {
   const [url, setUrl] = useState('');
   const [list, setList] = useState(false);
 
+  const projectsRef = useRef();
   const sceneRef = useRef();
   const router = useRouter();
   const stateRef = useRef(state);
   const sketchRef = useRef();
   const infoRef = useRef();
+
+  const elemRef = useRef();
+  const objsRef = useRef();
 
   // Sync state with ref
   useEffect(() => {
@@ -36,14 +42,27 @@ const WorkPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch(
-        'https://dashboard.jordigarreta.com/wp-json/wp/v2/posts?_embed&per_page=100'
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setProjects(data);
-        });
+      try {
+        // Fetch posts
+        const postsRes = await fetch(
+          'https://dashboard.jordigarreta.com/wp-json/wp/v2/posts?_embed&per_page=100'
+        );
+        const postsData = await postsRes.json();
+
+        // Fetch categories
+        const categoriesRes = await fetch(
+          'https://dashboard.jordigarreta.com/wp-json/wp/v2/categories'
+        );
+        const categoriesData = await categoriesRes.json();
+
+        setCategories(categoriesData);
+
+        // Update state
+        projectsRef.current = postsData;
+        setProjects(postsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
 
     fetchData();
@@ -63,14 +82,22 @@ const WorkPage = () => {
     let position = 0;
     let rounded = 0;
 
-    let objs = Array(projects.length).fill({ dist: 0 });
+    objsRef.current = Array(projects.length).fill({ dist: 0 });
 
     let wrap = document.getElementById('wrap');
-    let elems = [...document.querySelectorAll('.n')];
+    elemRef.current = [...document.querySelectorAll('.n')];
 
-    const handleWheel = (e) => {
-      speed += e.deltaY * 0.0003;
+    const debounce = (fn, delay) => {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
     };
+
+    const handleWheel = debounce((e) => {
+      speed += e.deltaY * 0.0003;
+    }, 10);
 
     let touchStartY = 0;
     let touchMoveY = 0;
@@ -111,7 +138,7 @@ const WorkPage = () => {
       speed *= 0.8;
 
       // Clamp position so we don't have infinite scroll
-      position = Math.min(Math.max(position, 0), objs.length - 1);
+      position = Math.min(Math.max(position, 0), objsRef.current.length - 1);
 
       rounded = Math.round(position);
       let diff = rounded - position;
@@ -121,54 +148,60 @@ const WorkPage = () => {
       const currentState = stateRef.current;
 
       if (currentState === 'vertical') {
-        objs.forEach((o, i) => {
+        objsRef.current.forEach((o, i) => {
           o.dist = Math.min(Math.abs(position - i), 1);
           o.dist = 1 - o.dist ** 2;
 
           // div elements
-          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+          elemRef.current[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
 
           // webgl elements
           let scale = 0.3 + 1 * o.dist;
-          gsap.to(sketch.meshes[i].scale, {
-            x: scale,
-            y: scale,
-            z: scale,
-          });
+          if (sketch.meshes[i]) {
+            gsap.to(sketch.meshes[i].scale, {
+              x: scale,
+              y: scale,
+              z: scale,
+            });
 
-          gsap.to(sketch.meshes[i].position, {
-            x: 0,
-            y: i * 1.2 - position * 1.2,
-            z: 0,
-          });
+            gsap.to(sketch.meshes[i].position, {
+              x: 0,
+              y: i * 1.2 - position * 1.2,
+              z: 0,
+            });
 
-          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+            sketch.meshes[i].material.uniforms.distanceFromCenter.value =
+              o.dist;
+          }
         });
         wrap.style.transform = `translate(0, ${-position * 50 + 25}px)`;
       } else if (currentState === 'horizontal') {
-        objs.forEach((o, i) => {
+        objsRef.current.forEach((o, i) => {
           o.dist = Math.min(Math.abs(position - i), 1);
           o.dist = 1 - o.dist ** 2;
 
           // div elements
-          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+          elemRef.current[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
 
           // webgl elements
           let scale = 0.3 + 1 * o.dist;
 
-          gsap.to(sketch.meshes[i].scale, {
-            x: scale,
-            y: scale,
-            z: scale,
-          });
+          if (sketch.meshes[i]) {
+            gsap.to(sketch.meshes[i].scale, {
+              x: scale,
+              y: scale,
+              z: scale,
+            });
 
-          gsap.to(sketch.meshes[i].position, {
-            x: i * 1.7 - position * 1.7,
-            y: 0,
-            z: 0,
-          });
+            gsap.to(sketch.meshes[i].position, {
+              x: i * 1.7 - position * 1.7,
+              y: 0,
+              z: 0,
+            });
 
-          sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
+            sketch.meshes[i].material.uniforms.distanceFromCenter.value =
+              o.dist;
+          }
         });
         wrap.style.transform = `translate(${-position * 50 + 25}px, 0)`;
       } else if (currentState === 'circle') {
@@ -176,12 +209,12 @@ const WorkPage = () => {
         let scale = 1;
         let initScale = 0.1;
 
-        objs.forEach((o, i) => {
+        objsRef.current.forEach((o, i) => {
           o.dist = Math.min(Math.abs(position - i), 1);
           o.dist = 1 - o.dist ** 2;
 
           // Circle Slider
-          let angle = ((i - position) / objs.length) * Math.PI * 2;
+          let angle = ((i - position) / objsRef.current.length) * Math.PI * 2;
 
           gsap.to(sketch.meshes[i].position, {
             x: radius * Math.cos(angle + Math.PI / 2),
@@ -198,12 +231,12 @@ const WorkPage = () => {
           sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
         });
       } else if (currentState === 'depth') {
-        objs.forEach((o, i) => {
+        objsRef.current.forEach((o, i) => {
           o.dist = Math.min(Math.abs(position - i), 1);
           o.dist = 1 - o.dist ** 2;
 
           // div elements
-          elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+          elemRef.current[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
 
           // webgl elements
           // let scale = 0.3 + 1 * o.dist;
@@ -266,8 +299,9 @@ const WorkPage = () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('mousemove', handleMouseMove);
+      sketchRef.current?.dispose();
     };
-  }, [projects]);
+  }, [projects, router]);
 
   const handleMode = (e, _mode) => {
     const settingsMode = document.querySelectorAll('.settings-mode');
@@ -285,6 +319,32 @@ const WorkPage = () => {
     setList(!list);
   };
 
+  const handleCategory = (_cat) => {
+    setSelectedCategory(_cat);
+
+    if (_cat === 'all') {
+      setProjects(projectsRef.current);
+    } else {
+      const newProjects = [];
+      projectsRef.current.forEach((proj) => {
+        const categoryId = proj.categories[0];
+        const category = categories.find((cat) => cat.id === categoryId);
+
+        if (category.slug === _cat) {
+          newProjects.push(proj);
+        }
+      });
+
+      setProjects(newProjects);
+    }
+  };
+
+  const getCategoryName = (post, categories) => {
+    const categoryId = post.categories[0]; // Assuming the post has only one category
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.slug : 'no-category';
+  };
+
   return (
     <main className={styles.main}>
       <div id='wrap' className={styles.main__wrap}>
@@ -295,6 +355,7 @@ const WorkPage = () => {
               className={`n ${styles.main__n} ${styles[`main__n__${i}`]}`}
             >
               <Image
+                loading='lazy'
                 className='gallery-images'
                 src={`${project.acf.video.preview.url}`}
                 alt={String(i)}
@@ -302,6 +363,7 @@ const WorkPage = () => {
                 height={800 / 1.5}
                 data-url={`/work/${project.slug}`}
                 data-name={project.slug}
+                data-category={getCategoryName(project, categories)}
               />
             </div>
           );
@@ -320,7 +382,48 @@ const WorkPage = () => {
         </div>
       </div>
 
-      {projects && (
+      {categories && (
+        <div className={styles.main__categories}>
+          <div
+            className={`${styles.main__categories__item} ${
+              selectedCategory === 'all'
+                ? styles.main__categories__item__selected
+                : ''
+            }`}
+            onClick={() => handleCategory('all')}
+          >
+            <p>ALL</p>
+          </div>
+          {categories
+            .sort((a, b) => b.count - a.count)
+            .filter((cat) => cat.count > 0)
+            .map((cat, index) => (
+              <div
+                key={index}
+                className={`${styles.main__categories__item} ${
+                  selectedCategory === cat.slug
+                    ? styles.main__categories__item__selected
+                    : ''
+                }`}
+                onClick={() => handleCategory(cat.slug)}
+              >
+                <p>{cat.name}</p>
+              </div>
+            ))}
+
+          <div
+            className={`${styles.main__categories__bg} ${
+              selectedCategory
+                ? styles[
+                    `main__categories__bg__${selectedCategory.toLowerCase()}`
+                  ]
+                : ''
+            }`}
+          ></div>
+        </div>
+      )}
+
+      {projectsRef.current && (
         <>
           <div className={styles.main__burger} onClick={handleList}>
             <Image
@@ -339,10 +442,10 @@ const WorkPage = () => {
             <div className={styles.main__list__container}>
               <div className={styles.main__list__container__header}>
                 <h3>Projects</h3>
-                <h3>{projects.length}</h3>
+                <h3>{projectsRef.current.length}</h3>
               </div>
               <div>
-                {projects.map((project, index) => {
+                {projectsRef.current.map((project, index) => {
                   const parser = new DOMParser();
                   const parsedEntity = parser.parseFromString(
                     project.title.rendered,

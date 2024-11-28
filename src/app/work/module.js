@@ -88,6 +88,7 @@ export default class Sketch {
 
       mesh.userData.url = im.getAttribute('data-url');
       mesh.userData.name = im.getAttribute('data-name');
+      mesh.userData.category = im.getAttribute('data-category');
 
       group.add(mesh);
 
@@ -182,5 +183,66 @@ export default class Sketch {
     this.material.uniforms.time.value = this.time;
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera);
+  }
+
+  dispose() {
+    // Stop the render loop
+    this.isPlaying = false;
+
+    // Remove event listeners
+    document.removeEventListener('mousemove', this.onMouseMove, false);
+    window.removeEventListener('click', this.handleClick, false);
+    window.removeEventListener('resize', this.resize.bind(this));
+
+    // Dispose of geometries and materials
+    this.meshes.forEach((mesh) => {
+      if (mesh.geometry) mesh.geometry.dispose();
+      if (mesh.material) {
+        if (mesh.material.isMaterial) {
+          mesh.material.dispose();
+        } else {
+          // If it's an array of materials
+          mesh.material.forEach((material) => material.dispose());
+        }
+      }
+    });
+
+    this.materials.forEach((material) => material.dispose());
+
+    // Dispose of scene children
+    this.scene.children.forEach((child) => {
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) {
+        if (child.material.isMaterial) {
+          child.material.dispose();
+        } else {
+          child.material.forEach((material) => material.dispose());
+        }
+      }
+      this.scene.remove(child);
+    });
+
+    // Dispose of textures
+    this.materials.forEach((material) => {
+      if (material.uniforms?.texture1?.value) {
+        material.uniforms.texture1.value.dispose();
+      }
+    });
+
+    // Dispose of the renderer
+    this.renderer.dispose();
+    if (this.renderer.domElement) {
+      this.renderer.domElement.remove();
+    }
+
+    // Clear references
+    this.materials = null;
+    this.meshes = null;
+    this.groups = null;
+    this.scene = null;
+    this.camera = null;
+    this.controls = null;
+    this.renderer = null;
+    this.container = null;
   }
 }

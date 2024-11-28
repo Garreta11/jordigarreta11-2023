@@ -78,6 +78,9 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       font-size: var(--font-size-xsmall);
       animation: fade ease 5s forwards;
       margin-bottom: 30px;
+      @include sm {
+        font-size: var(--font-size-smaller);
+      }
     }
     &__link {
       border: 1px solid var(--jgd--white);
@@ -111,7 +114,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       transform: translate(-50%, 0);
       animation: none;
     }
-    
+
     &__list {
       mix-blend-mode: difference;
       list-style: none;
@@ -130,13 +133,12 @@ $animationfadein: fadein ease 0.5s forwards 2s;
         img {
           transition: all ease 0.5s;
           opacity: 0.5;
-          
+
           &:hover {
             opacity: 1;
             transform: scale(1.5);
           }
         }
-
       }
     }
   }
@@ -267,11 +269,85 @@ $animationfadein: fadein ease 0.5s forwards 2s;
           transform: translate(-50%, -50%) scale(0);
         }
       }
-
     }
-
   }
 
+  &__categories {
+    position: fixed;
+    top: 150px;
+    left: 50%;
+    transform: translate(-50%, 0px);
+
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background-color: var(--jgd--white);
+    padding: 20px 30px;
+
+    @include sm {
+      font-size: var(--font-size-smaller);
+      gap: 20px;
+      padding: 10px 20px;
+      max-width: 240px;
+    }
+
+    &__item {
+      transition: all ease 1s;
+      cursor: pointer;
+      mix-blend-mode: difference;
+      color: var(--jgd--white);
+      text-transform: uppercase;
+    }
+
+    &__bg {
+      position: absolute;
+      top: 9px;
+      background-color: var(--jgd--black);
+      height: 70%;
+      z-index: -1;
+      transition: all ease 1s;
+
+      @include sm {
+        top: 6px;
+      }
+
+      &__all {
+        left: 10px;
+        width: 70px;
+        @include sm {
+          left: 5px;
+          width: 45px;
+        }
+      }
+
+      &__installation {
+        left: 70px;
+        width: 255px;
+        @include sm {
+          left: 40px;
+          width: 85px;
+        }
+      }
+
+      &__virtual-reality {
+        left: 425px;
+        width: 160px;
+        @include sm {
+          left: 175px;
+          width: 55px;
+        }
+      }
+
+      &__website {
+        left: 325px;
+        width: 95px;
+        @include sm {
+          left: 115px;
+          width: 65px;
+        }
+      }
+    }
+  }
 }
 
 @keyframes settings {
