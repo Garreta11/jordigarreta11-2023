@@ -281,7 +281,8 @@ $animationfadein: fadein ease 0.5s forwards 2s;
     display: flex;
     align-items: center;
     gap: 30px;
-    background-color: var(--jgd--white);
+    //background-color: var(--jgd--white);
+    background-color: transparent;
     padding: 20px 30px;
 
     @include sm {
@@ -296,16 +297,17 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       cursor: pointer;
       mix-blend-mode: difference;
       color: var(--jgd--white);
-      text-transform: uppercase;
+      text-transform: initial;
     }
 
     &__bg {
       position: absolute;
       top: 9px;
-      background-color: var(--jgd--black);
+      background-color: transparent;
       height: 70%;
       z-index: -1;
       transition: all ease 1s;
+      border-bottom: 1px solid white;
 
       @include sm {
         top: 6px;

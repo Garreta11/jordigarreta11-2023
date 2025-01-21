@@ -392,7 +392,7 @@ const WorkPage = () => {
             }`}
             onClick={() => handleCategory('all')}
           >
-            <p>ALL</p>
+            <p>All</p>
           </div>
           {categories
             .sort((a, b) => b.count - a.count)
