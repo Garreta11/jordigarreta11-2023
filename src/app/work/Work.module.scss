@@ -324,28 +324,28 @@ $animationfadein: fadein ease 0.5s forwards 2s;
 
       &__installation {
         left: 70px;
-        width: 255px;
+        width: 185px;
         @include sm {
           left: 40px;
-          width: 85px;
+          width: 60px;
         }
       }
 
       &__virtual-reality {
-        left: 425px;
-        width: 160px;
+        left: 355px;
+        width: 115px;
         @include sm {
-          left: 175px;
-          width: 55px;
+          left: 155px;
+          width: 35px;
         }
       }
 
       &__website {
-        left: 325px;
-        width: 95px;
+        left: 260px;
+        width: 85px;
         @include sm {
-          left: 115px;
-          width: 65px;
+          left: 105px;
+          width: 42px;
         }
       }
     }
