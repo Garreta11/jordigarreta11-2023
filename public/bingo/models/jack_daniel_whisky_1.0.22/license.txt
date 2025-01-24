@@ -1,0 +1,11 @@
+Model Information:
+* title:	Jack Daniel Whisky 1.0.22
+* source:	https://sketchfab.com/3d-models/jack-daniel-whisky-1022-f55f99b809924bc99234654cde9683d4
+* author:	FanoD3c (https://sketchfab.com/fanodev310)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Jack Daniel Whisky 1.0.22" (https://sketchfab.com/3d-models/jack-daniel-whisky-1022-f55f99b809924bc99234654cde9683d4) by FanoD3c (https://sketchfab.com/fanodev310) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

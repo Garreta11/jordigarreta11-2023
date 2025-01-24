@@ -1,0 +1,54 @@
+.bingo {
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &__number {
+    position: fixed;
+    color: #fedb37;
+    z-index: 300;
+    font-family: 'Digital7';
+    font-size: 0;
+    transition: all 0.3s ease;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  button {
+    position: fixed;
+    left: 50%;
+    bottom: 50px;
+    transform: translate(-50%, 0);
+    z-index: 100;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    background: radial-gradient(
+        ellipse farthest-corner at right bottom,
+        #fedb37 0%,
+        #fdb931 8%,
+        #9f7928 30%,
+        #8a6e2f 40%,
+        transparent 80%
+      ),
+      radial-gradient(
+        ellipse farthest-corner at left top,
+        #ffffff 0%,
+        #ffffac 8%,
+        #d1b464 25%,
+        #5d4a1f 62.5%,
+        #5d4a1f 100%
+      );
+    cursor: pointer;
+
+    color: white;
+
+    &:hover {
+      color: black;
+    }
+  }
+}

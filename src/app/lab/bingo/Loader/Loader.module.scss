@@ -1,0 +1,58 @@
+.loader {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 1;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0px 100px;
+
+    &__text {
+      width: 100%;
+      margin-bottom: 50px;
+    }
+
+    button {
+      border: none;
+      color: white;
+      border-radius: 50px;
+      padding: 10px 20px;
+      background: radial-gradient(
+          ellipse farthest-corner at right bottom,
+          #fedb37 0%,
+          #fdb931 8%,
+          #9f7928 30%,
+          #8a6e2f 40%,
+          transparent 80%
+        ),
+        radial-gradient(
+          ellipse farthest-corner at left top,
+          #ffffff 0%,
+          #ffffac 8%,
+          #d1b464 25%,
+          #5d4a1f 62.5%,
+          #5d4a1f 100%
+        );
+      cursor: pointer;
+      &:hover {
+        color: black;
+      }
+    }
+  }
+
+  &__img {
+    pointer-events: none;
+    width: 50%;
+  }
+}

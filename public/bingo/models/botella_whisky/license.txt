@@ -1,0 +1,11 @@
+Model Information:
+* title:	Botella Whisky
+* source:	https://sketchfab.com/3d-models/botella-whisky-28024150b46448debe1bbc22b6e0d1d1
+* author:	jimenex (https://sketchfab.com/jimenex)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Botella Whisky" (https://sketchfab.com/3d-models/botella-whisky-28024150b46448debe1bbc22b6e0d1d1) by jimenex (https://sketchfab.com/jimenex) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
