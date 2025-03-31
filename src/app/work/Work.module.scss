@@ -315,7 +315,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
 
       &__all {
         left: 10px;
-        width: 70px;
+        width: 60px;
         @include sm {
           left: 5px;
           width: 45px;
@@ -324,7 +324,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
 
       &__installation {
         left: 70px;
-        width: 185px;
+        width: 105px;
         @include sm {
           left: 40px;
           width: 60px;
@@ -332,7 +332,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       }
 
       &__virtual-reality {
-        left: 355px;
+        left: 275px;
         width: 115px;
         @include sm {
           left: 155px;
@@ -341,7 +341,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
       }
 
       &__website {
-        left: 260px;
+        left: 180px;
         width: 85px;
         @include sm {
           left: 105px;
