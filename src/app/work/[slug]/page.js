@@ -7,11 +7,15 @@ import TextReveal from '@/app/components/TextReveal/TextReveal';
 
 const transitionTitle = {
   duration: 1,
-  duration: 1,
   ease: [0.43, 0.13, 0.23, 0.96],
 };
 const transitionDescription = {
-  delay: 0.5,
+  delay: 0,
+  duration: 1,
+  ease: [0.43, 0.13, 0.23, 0.96],
+};
+const transitionImages = {
+  delay: 3,
   duration: 1,
   ease: [0.43, 0.13, 0.23, 0.96],
 };
@@ -55,7 +59,7 @@ const ProjectPage = ({ params }) => {
               if (d.previous !== null) {
                 setPrevProject(d.previous.slug);
               } else {
-                setPrevProject('starmax');
+                setPrevProject('samba-tv');
               }
             }
           });
@@ -86,11 +90,15 @@ const ProjectPage = ({ params }) => {
             >
               {/* <p>{project.acf.description}</p> */}
               <TextReveal text={project.acf.description} />
-              <div
-                className={styles.project_images}
-                dangerouslySetInnerHTML={{ __html: project.content.rendered }}
-              />
             </motion.div>
+
+            <motion.div
+              className={styles.project_images}
+              dangerouslySetInnerHTML={{ __html: project.content.rendered }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={transitionImages}
+            />
 
             <motion.div
               className={styles.project_info_right}

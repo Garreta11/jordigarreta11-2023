@@ -39,7 +39,7 @@
             font-size: var(--font-size-small);
             pointer-events: all;
 
-            text-transform: capitalize;
+            text-transform: uppercase;
 
             @include sm {
                 font-size: var(--font-size-smaller);
@@ -62,7 +62,7 @@
         }
 
         &__bottom {
-            font-size: var(--font-size-medium);
+            font-size: var(--font-size-small);
             display: flex;
             justify-content: space-between;
             

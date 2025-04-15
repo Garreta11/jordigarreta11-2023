@@ -53,7 +53,7 @@
 
     &_title {
         font-size: var(--font-size-big);
-        margin-bottom: 100px;
+        margin-bottom: 50px;
         text-transform: uppercase;
         width: 100%;
         font-weight: 300;
@@ -76,7 +76,7 @@
         }
 
         &_description {
-            font-size: var(--font-size-medium);
+            font-size: var(--font-size-small);
             width: 80%;
             font-weight: 300;
             margin: 0 auto;

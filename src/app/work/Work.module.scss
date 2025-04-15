@@ -224,6 +224,7 @@ $animationfadein: fadein ease 0.5s forwards 2s;
           text-transform: uppercase;
           padding: 10px 0px;
           position: relative;
+          align-items: center;
           &:hover {
             background-color: var(--jgd--white);
             // padding: 30px 10px;
@@ -250,10 +251,10 @@ $animationfadein: fadein ease 0.5s forwards 2s;
           }
         }
         &__category {
-          font-size: var(--font-size-small);
+          font-size: var(--font-size-smaller);
           width: fit-content;
           background-color: transparent;
-          text-transform: lowercase;
+          text-transform: uppercase;
           font-weight: 300;
           text-align: right;
           &:hover {
