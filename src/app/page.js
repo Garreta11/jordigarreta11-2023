@@ -9,6 +9,7 @@ import Particles from './components/Particles/Particles';
 
 import BackgroundVideo from './components/BackgroundVideo/BackgroundVideo';
 import GPGPUParticles from './components/GPGPUParticles/GPGPUParticles';
+import ParticlesSphere from './components/ParticlesSphere/ParticlesSphere';
 
 export default function Home() {
   const [zoomParticles, setZoomParticles] = useState(false);
@@ -21,7 +22,8 @@ export default function Home() {
   return (
     <motion.main className={styles.main}>
       <BackgroundVideo videoLoaded={videoLoaded} />
-      <Particles zoom={zoomParticles} />
+      {/* <Particles zoom={zoomParticles} /> */}
+      <ParticlesSphere />
     </motion.main>
   );
 }
