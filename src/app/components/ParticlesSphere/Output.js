@@ -41,7 +41,7 @@ export default class Output {
     this.targetElement = _options.targetElement;
 
     this.time = 0;
-    this.size = 1024;
+    this.size = this.isMobileDevice() ? 256 : 256;
     this.number = this.size * this.size;
 
     this.raycaster = new THREE.Raycaster();
@@ -61,6 +61,12 @@ export default class Output {
     this.addObjects();
     this.initAnimation();
     this.render();
+  }
+
+  isMobileDevice() {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   }
 
   async getPixelDataFromImage(url) {
@@ -465,7 +471,7 @@ export default class Output {
       uniforms: {
         time: { value: 0 },
         uTexture: { value: this.positions },
-        uParticleStartColor: { value: new THREE.Color(0x8c8c8c) },
+        uParticleStartColor: { value: new THREE.Color(0x9e889d) },
         uParticleEndColor: { value: new THREE.Color(0xcccccc) },
         uTime: { value: 0 },
       },

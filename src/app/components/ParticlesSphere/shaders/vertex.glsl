@@ -170,6 +170,6 @@ void main() {
 
   vParticleColor = mix(uParticleStartColor, uParticleEndColor, t);
 
-  gl_PointSize = (10.0 / -mvPosition.z);
+  gl_PointSize = (20.0 / -mvPosition.z);
   gl_Position = projectionMatrix * mvPosition;
 }
