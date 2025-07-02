@@ -1,0 +1,165 @@
+[
+  {
+    "year": 1993,
+    "title": "Born in Barcelona",
+    "skyColor": "#FFFFFF",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder1.png"
+      }
+    ]
+  },
+  {
+    "year": 2011,
+    "endYear": 2015,
+    "title": "Audiovisual Systems Engineering (UPF)",
+    "skyColor": "#C8102E",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "video",
+        "src": "/timeline/placeholder.mp4"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2016,
+    "title": "Domus Academy - Master in Interaction Design",
+    "skyColor": "#0260c9",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2016,
+    "title": "Interaction Developer Internship (OpenDot)",
+    "skyColor": "#FF6767",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2017,
+    "title": "Junior Interaction Developer (DotDotDot)",
+    "skyColor": "#FFF102",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder1.png"
+      },
+      {
+        "type": "video",
+        "src": "/timeline/placeholder.mp4"
+      }
+    ]
+  },
+  {
+    "year": 2018,
+    "title": "Creative Technologist (Domestic)",
+    "skyColor": "#F0EEE5",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2019,
+    "title": "Technical Leader (Betevé)",
+    "skyColor": "#F95741",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "title": "Creative Technologist (Wildbytes)",
+    "skyColor": "#FE38CB",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "title": "Teacher (ESDi)",
+    "skyColor": "#F6F6F6",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "video",
+        "src": "/timeline/placeholder.mp4"
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "endYear": 2023,
+    "title": "Creative Developer (ThinkMoto)",
+    "skyColor": "#FCFE8A",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "video",
+        "src": "/timeline/placeholder.mp4"
+      }
+    ]
+  },
+  {
+    "year": 2023,
+    "title": "Freelance",
+    "skyColor": "#FFFFFF",
+    "media": [
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/placeholder.png"
+      }
+    ]
+  }
+]
