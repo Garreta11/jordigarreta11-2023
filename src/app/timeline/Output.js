@@ -1,13 +1,45 @@
 import * as THREE from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
 
+import GUI from 'lil-gui';
+
+// data
 import timeline from './timeline.json';
 
+// shaders
+import vertexShader from './shaders/terrain/vertex.glsl';
+import fragmentShader from './shaders/terrain/fragment.glsl';
+
+import Delaunator from 'delaunator';
+import PoissonDiskSampling from 'poisson-disk-sampling';
+
+
 gsap.registerPlugin(ScrollTrigger);
+
+
+const SIZE = 50;
+var p = new PoissonDiskSampling({
+  shape: [SIZE, SIZE],
+  minDistance: 0.1,
+  maxDistance: 0.3,
+  tries: 10
+});
+var points = p.fill();
+
+let points3D = points.map(p => {
+  return new THREE.Vector3(p[0], 0, p[1]);
+})
+
+let indexDelaunay = Delaunator.from(
+  points.map(p => {
+    return [p[0], p[1]];
+  })
+);
 
 export default class Output {
   constructor(_options = {}) {
@@ -27,10 +59,26 @@ export default class Output {
     this.setMediaPlanes();
 
     this.setGround()
+    // this.setupSettigs();
 
     this.setScroll()
     this.setResize();
     this.render();
+  }
+
+  setupSettigs() {
+    this.settings = {
+      valleyWidth: 0.5,
+      valleySharpness: 0.5
+    };
+
+    this.gui = new GUI();
+    this.gui.add(this.settings, 'valleyWidth', 0, 1, 0.01).onChange((val) => {
+      this.groundMaterial.uniforms.valleyWidth.value = val;
+    });
+    this.gui.add(this.settings, 'valleySharpness', 0, 1, 0.01).onChange((val) => {
+      this.groundMaterial.uniforms.valleySharpness.value = val;
+    });
   }
 
   setScene() {
@@ -50,11 +98,13 @@ export default class Output {
       70,
       this.width / this.height,
       0.01,
-      10
+      1000
     );
 
     this.cameraZ = 1;
     this.camera.position.z = this.cameraZ;
+
+    // this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
   }
 
   setLights() {
@@ -67,13 +117,34 @@ export default class Output {
   }
 
   setGround() {
-    this.ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(100, 100, 200, 200),
-      new THREE.MeshStandardMaterial({ color: 0x000000, wireframe: true })
-    );
-    this.ground.rotation.x = -Math.PI / 2;
-    this.ground.position.y = -0.5;
-    this.scene.add(this.ground);
+
+    this.groundMaterial = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        time: { value: 0 },
+        uColor: { value: new THREE.Color(0xFFFFFF) },
+        valleyWidth: { value: 0.5 },
+        valleySharpness: { value: 0.5 }
+      },
+      wireframe: true
+    });
+
+    this.geometry = new THREE.BufferGeometry().setFromPoints(points3D);
+    let meshIndex = [];
+    for (let i = 0; i < indexDelaunay.triangles.length; i+=1) {
+      meshIndex.push(indexDelaunay.triangles[i]);
+    }
+    this.geometry.computeVertexNormals();
+    this.geometry.setIndex(meshIndex);
+    
+    this.mesh = new THREE.Mesh(this.geometry, this.groundMaterial);
+    this.mesh.position.x = -SIZE/2;
+    this.mesh.position.y = -0.25;
+    this.mesh.position.z = -SIZE/2;
+    
+    this.scene.add(this.mesh);
+
   }
 
   set3dTimeline() {
@@ -122,14 +193,14 @@ export default class Output {
         // Position year text (top line)
         yearMesh.position.set(
           -yearWidth / 2,     // Center horizontally
-          lineSpacing / 2,    // Position above center
+          0.05 + lineSpacing / 2,    // Position above center
           -index * 2          // Z spacing for timeline
         );
   
         // Position title text (bottom line)
         titleMesh.position.set(
           -titleWidth / 2,    // Center horizontally
-          -lineSpacing / 2,   // Position below center
+          0.05 + -lineSpacing / 2,   // Position below center
           -index * 2          // Z spacing for timeline
         );
   
@@ -183,10 +254,12 @@ export default class Output {
             const currentZ = -entryIndex * 2;
             const nextZ = -(entryIndex + 1) * 2;
             const mediaZ = currentZ + (nextZ - currentZ) * (0.25 + Math.random() * (0.75 - 0.25));
+
+            const yOffset = (mediaIndex % 2 === 0 ? 1 : -1) * 0.05;
   
             plane.position.set(
               startX + mediaIndex * spacing, // distribute horizontally
-              0,
+              yOffset,
               mediaZ
             );
   
@@ -225,10 +298,12 @@ export default class Output {
             const currentZ = -entryIndex * 2;
             const nextZ = -(entryIndex + 1) * 2;
             const mediaZ = currentZ + (nextZ - currentZ) * (0.25 + Math.random() * (0.75 - 0.25));
+
+            const yOffset = (mediaIndex % 2 === 0 ? 1 : -1) * 0.05;
   
             plane.position.set(
               startX + mediaIndex * spacing,
-              0,
+              yOffset,
               mediaZ
             );
   
@@ -244,7 +319,6 @@ export default class Output {
     });
   }
   
-
   // scroll
   setScroll() {
     if (!this.timelineData) return;
@@ -275,6 +349,9 @@ export default class Output {
           
           // Update renderer clear color and scene fog
           //this.renderer.setClearColor(interpolatedColor);
+          if (this.groundMaterial) {
+            this.groundMaterial.uniforms.uColor.value = interpolatedColor;
+          }
           if (this.scene.fog) {
             this.scene.fog.color.copy(interpolatedColor);
           }
@@ -380,7 +457,7 @@ export default class Output {
       if (this.mediaPlanes && this.camera) {
         this.mediaPlanes.forEach((plane) => {
           const distance = Math.abs(this.camera.position.z - plane.position.z);
-          const maxFadeDistance = 2.0; // Larger fade distance
+          const maxFadeDistance = 3.0; // Larger fade distance
           
           // Exponential curve - reaches 1 much earlier, then slowly fades out
           const normalizedDistance = distance / maxFadeDistance;
@@ -397,7 +474,11 @@ export default class Output {
           }
         });
       }
-        
+
+      // Update ground shader
+      if (this.groundMaterial) {
+        this.groundMaterial.uniforms.time.value += 0.02;
+      }
   
       this.renderer.render(this.scene, this.camera);
     };

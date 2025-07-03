@@ -6,11 +6,11 @@
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/basketball.jpg"
       },
       {
         "type": "image",
-        "src": "/timeline/placeholder1.png"
+        "src": "/timeline/ski.jpg"
       }
     ]
   },
@@ -21,31 +21,27 @@
     "skyColor": "#C8102E",
     "media": [
       {
-        "type": "image",
-        "src": "/timeline/placeholder.png"
-      },
-      {
         "type": "video",
-        "src": "/timeline/placeholder.mp4"
+        "src": "/timeline/upf.mp4"
       },
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/upf1.jpeg"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/upf2.jpg"
       }
     ]
   },
   {
     "year": 2016,
-    "title": "Domus Academy - Master in Interaction Design",
+    "title": "Master in Interaction Design (Domus Academy)",
     "skyColor": "#0260c9",
     "media": [
       {
-        "type": "image",
-        "src": "/timeline/placeholder.png"
-      },
-      {
-        "type": "image",
-        "src": "/timeline/placeholder.png"
+        "type": "video",
+        "src": "/timeline/domus.mp4"
       }
     ]
   },
@@ -56,33 +52,41 @@
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/opendot.jpg"
       }
     ]
   },
   {
     "year": 2017,
-    "title": "Junior Interaction Developer (DotDotDot)",
+    "title": "Junior Interaction Developer (dotdotdot)",
     "skyColor": "#FFF102",
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder1.png"
+        "src": "/timeline/dotdotdot.png"
       },
       {
         "type": "video",
-        "src": "/timeline/placeholder.mp4"
+        "src": "/timeline/dotdotdot.mp4"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/dotdotdot1.png"
       }
     ]
   },
   {
     "year": 2018,
-    "title": "Creative Technologist (Domestic)",
+    "title": "Creative Technologist (Domestic Data Streamers)",
     "skyColor": "#F0EEE5",
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/domestic.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/domestic1.png"
       }
     ]
   },
@@ -93,11 +97,7 @@
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
-      },
-      {
-        "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/beteve.jpeg"
       }
     ]
   },
@@ -108,42 +108,35 @@
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
-      }
-    ]
-  },
-  {
-    "year": 2020,
-    "title": "Teacher (ESDi)",
-    "skyColor": "#F6F6F6",
-    "media": [
-      {
-        "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/wildbytes.jpeg"
       },
       {
-        "type": "video",
-        "src": "/timeline/placeholder.mp4"
+        "type": "image",
+        "src": "/timeline/wildbytes2.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/wildbytes3.jpg"
       }
     ]
   },
   {
     "year": 2020,
     "endYear": 2023,
-    "title": "Creative Developer (ThinkMoto)",
+    "title": "Creative Developer (thinkmoto)",
     "skyColor": "#FCFE8A",
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/thinkmoto.png"
       },
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/thinkmoto1.webp"
       },
       {
-        "type": "video",
-        "src": "/timeline/placeholder.mp4"
+        "type": "image",
+        "src": "/timeline/thinkmoto2.png"
       }
     ]
   },
@@ -154,11 +147,19 @@
     "media": [
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/freelance.jpeg"
       },
       {
         "type": "image",
-        "src": "/timeline/placeholder.png"
+        "src": "/timeline/freelance1.png"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/freelance2.jpg"
+      },
+      {
+        "type": "image",
+        "src": "/timeline/freelance3.jpg"
       }
     ]
   }
